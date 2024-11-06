@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -36,11 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = jwtUtil.extractTokenFromHeader(request.getHeader("Authorization"));
             if (token != null && jwtUtil.validateToken(token)) {
                 // 토큰에서 사용자 ID 추출
-                String userId = jwtUtil.getUserId(token);
-
+                String userEmail = jwtUtil.getUserEmail(token);
                 // 사용자 정보 로드
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
-
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
                 // SecurityContext에 인증 정보 설정
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

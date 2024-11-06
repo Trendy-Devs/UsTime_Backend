@@ -12,18 +12,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService service;
     private final UserService userService;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody UserDto dto) {
-        service.signUp(dto); // 사용자 등록 처리
+        userService.signUp(dto); // 사용자 등록 처리
         return ResponseEntity.ok().build(); // 상태 코드 200 OK만 반환
     }
 
     @GetMapping("/selectone")
-    public ResponseEntity<UserDto> selectOne(@RequestParam long idx) {
-        UserDto dto = service.selectUser(idx);
+    public ResponseEntity<UserDto> selectOne(@RequestParam long userId) {
+        UserDto dto = userService.getUserInfo(userId);
         return ResponseEntity.ok(dto);
     }
 
@@ -31,6 +30,12 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody LoginDto dto) {
         String token = userService.login(dto);
         return ResponseEntity.ok(token);
+    }
+
+    @GetMapping("/userinfo")
+    public ResponseEntity<UserDto> getUserInfo(@RequestParam long userId) {
+        UserDto userInfo = userService.getUserInfo(userId);
+        return ResponseEntity.ok(userInfo);
     }
 
 }

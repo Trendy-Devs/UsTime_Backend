@@ -29,7 +29,7 @@ public class UserService {
     }
 
     //내정보 보기
-    public UserDto selectUser(Long userId) {
+    public UserDto getUserInfo(Long userId) {
         return dao.selectUser(userId);
     }
 

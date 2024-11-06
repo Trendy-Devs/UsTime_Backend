@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
@@ -21,8 +22,9 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 권한 리스트를 반환합니다. 예: ROLE_USER 등
-        return List.of(() -> "ROLE_USER");
+        // 권한 리스트를 반환합니다. 이후에 role이 필요할경우 수정예정
+        // return List.of(() -> "ROLE_USER");
+        return Collections.emptyList();
     }
 
     @Override

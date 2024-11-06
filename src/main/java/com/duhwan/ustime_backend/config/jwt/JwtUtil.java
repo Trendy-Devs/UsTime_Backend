@@ -23,7 +23,6 @@ public class JwtUtil {
         claims.put("userId", userDetails.getUserId()); // CustomUserDetails에서 userId 추출
         claims.put("email", userDetails.getEmail()); // CustomUserDetails의 getUsername() 메서드를 사용
         claims.put("name", userDetails.getUsername()); // CustomUserDetails에서 name 추출
-        claims.put("role", "ROLE_USER"); // 또는 사용자 역할에 맞게 설정
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -70,12 +69,12 @@ public class JwtUtil {
     }
 
     //토큰에서 userId 추출
-    public String getUserId(String token) {
-        return parseclaims(token).get("userId", String.class);
+    public Long getUserId(String token) {
+        return parseclaims(token).get("userId", Long.class);
     }
     //이후 필요한게 있을시 추가 작성
-
-
-
+    public String getUserEmail(String token) {
+        return parseclaims(token).get("email", String.class);
+    }
 
 }

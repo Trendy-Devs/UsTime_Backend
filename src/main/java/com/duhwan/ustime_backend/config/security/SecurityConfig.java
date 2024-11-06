@@ -27,11 +27,15 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll() // 모든 요청을 허용
+                        .requestMatchers("/user/userinfo").authenticated() // /userinfo는 인증 필요
+                        .anyRequest().permitAll()                         // 그 외 모든 요청 허용
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
+
 
     // AuthenticationManager 빈 설정
     @Bean
@@ -42,8 +46,6 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService);
         return authenticationManagerBuilder.build();
     }
-
-
 
     // CORS 세부 설정
     @Bean
