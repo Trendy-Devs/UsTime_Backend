@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.duhwan.ustime_backend.dao.UserMapper">
+
+    <insert id="signUp" parameterType="UserDto">
+        INSERT INTO User(email, password, name, created_at)
+        VALUES(#{email}, #{password}, #{name}, #{createdAt})
+    </insert>
+
+    <!--유저 정보보기-->
+    <select id = "selectUser" resultType="UserDto">
+        SELECT *
+        FROM User
+        WHERE user_id=#{userId}
+    </select>
+
+    <!--이메일로 유저아이디 찾기-->
+    <select id="findByEmail" parameterType="String" resultType="UserDto">
+        SELECT user_id AS userId, email, password, name, couple_id AS coupleId, created_at AS createdAt
+        FROM User
+        WHERE email = #{email}
+    </select>
+
+</mapper>
