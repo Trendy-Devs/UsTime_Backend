@@ -5,20 +5,20 @@
 <mapper namespace="com.duhwan.ustime_backend.dao.UserMapper">
 
     <insert id="signUp" parameterType="UserDto">
-        INSERT INTO User(email, password, name, created_at)
-        VALUES(#{email}, #{password}, #{name}, #{createdAt})
+        INSERT INTO User(email, password, name, birthdate, gender, phone, createdAt)
+        VALUES(#{email}, #{password}, #{name}, #{birthdate}, #{gender}, #{phone}, #{createdAt})
     </insert>
 
-    <!--유저 정보보기-->
-    <select id = "selectUser" resultType="UserDto">
+    <select id="selectUser" resultType="UserDto">
         SELECT *
         FROM User
-        WHERE user_id=#{userId}
+        WHERE userId=#{userId}
     </select>
+
 
     <!--이메일로 유저아이디 찾기-->
     <select id="findByEmail" parameterType="String" resultType="UserDto">
-        SELECT user_id AS userId, email, password, name, couple_id AS coupleId, created_at AS createdAt
+        SELECT *
         FROM User
         WHERE email = #{email}
     </select>
