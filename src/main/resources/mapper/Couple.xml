@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.duhwan.ustime_backend.dao.CoupleMapper">
+
+    <!-- 커플 신청 추가 -->
+    <insert id="createCoupleRequest" parameterType="CoupleRequestDTO">
+        INSERT INTO CoupleRequest (fromUserId, toUserId, status, requestedAt)
+        VALUES (#{fromUserId}, #{toUserId}, 'PENDING', NOW())
+    </insert>
+
+    <!-- 특정 사용자가 보낸 또는 받은 커플 신청 조회 -->
+    <select id="getCoupleRequests" resultType="CoupleRequestDTO">
+        SELECT requestId, fromUserId, toUserId, status, requestedAt, respondedAt
+        FROM CoupleRequest
+        WHERE fromUserId = #{userId} OR toUserId = #{userId}
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <!-- 커플 신청 승인 -->
+    <update id="approveCoupleRequest" parameterType="Long">
+        UPDATE CoupleRequest
+        SET status = 'APPROVED', respondedAt = NOW()
+        WHERE requestId = #{requestId}
+    </update>
+
+    <!-- 커플 신청 거절 -->
+    <update id="declineCoupleRequest" parameterType="Long">
+        UPDATE CoupleRequest
+        SET status = 'DECLINED', respondedAt = NOW()
+        WHERE requestId = #{requestId}
+    </update>
+
+    <!-- 커플 생성 후 User 테이블에서 coupleId 업데이트 -->
+    <update id="updateCoupleId" parameterType="map">
+        UPDATE User
+        SET coupleId = #{coupleId}
+        WHERE userId = #{userId}
+    </update>
+
+    <!-- 커플 테이블에 커플 추가 -->
+    <insert id="createCouple" parameterType="CoupleDTO">
+        INSERT INTO Couple (user1Id, user2Id, startDate)
+        VALUES (#{user1Id}, #{user2Id}, NOW())
+    </insert>
+
+</mapper>
