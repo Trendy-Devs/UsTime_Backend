@@ -1,7 +1,6 @@
 package com.duhwan.ustime_backend.dto;
 
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

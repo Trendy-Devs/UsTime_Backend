@@ -9,11 +9,12 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CoupleConfirmDto {
+public class CoupleResponseDto {
 
-    private String fromUserName;
-    private String toUserName;
-    private String status;
-    private LocalDateTime requestedAt;
+    private Long requestId;             // 요청 고유번호
+    private String fromUserName;        // 요청자 이름
+    private String toUserName;          // 대상자 이름
+    private String status;              // 상태
+    private LocalDateTime requestedAt;  // 보낸일시
 
 }

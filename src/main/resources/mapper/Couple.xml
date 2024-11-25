@@ -5,32 +5,32 @@
 <mapper namespace="com.duhwan.ustime_backend.dao.CoupleMapper">
 
     <!-- 커플 신청 추가 -->
-    <insert id="createCoupleRequest" parameterType="CoupleRequestDTO">
-        INSERT INTO CoupleRequest (fromUserId, toUserId, status, requestedAt)
-        VALUES (#{fromUserId}, #{toUserId}, 'PENDING', NOW())
+    <insert id="createCoupleRequest" parameterType="CoupleRequestDto">
+        INSERT INTO CoupleRequest (fromUserId, toUserId, status)
+        VALUES (#{fromUserId}, #{toUserId}, '대기')
     </insert>
 
     <!-- 특정 사용자가 보낸 또는 받은 커플 신청 조회 -->
-    <select id="getCoupleRequests" resultType="CoupleRequestDTO">
-        SELECT requestId, fromUserId, toUserId, status, requestedAt, respondedAt
-        FROM CoupleRequest
-        WHERE fromUserId = #{userId} OR toUserId = #{userId}
-        <if test="status != null">
-            AND status = #{status}
-        </if>
+    <select id="getCoupleRequests" resultType="CoupleResponseDto">
+        SELECT cr.requestId,u1.name As fromUserName, u2.name AS toUserName, cr.status, cr.requestedAt
+        FROM CoupleRequest cr
+                 JOIN User u1 ON cr.fromUserId = u1.userId
+                 JOIN User u2 ON cr.toUserId = u2.userId
+        WHERE (cr.fromUserId = #{userId} OR cr.toUserId = #{userId})
+          AND cr.status = '대기'
     </select>
 
     <!-- 커플 신청 승인 -->
     <update id="approveCoupleRequest" parameterType="Long">
         UPDATE CoupleRequest
-        SET status = 'APPROVED', respondedAt = NOW()
+        SET status = '승인',respondedAt = CURRENT_TIMESTAMP
         WHERE requestId = #{requestId}
     </update>
 
     <!-- 커플 신청 거절 -->
     <update id="declineCoupleRequest" parameterType="Long">
         UPDATE CoupleRequest
-        SET status = 'DECLINED', respondedAt = NOW()
+        SET status = '거절'
         WHERE requestId = #{requestId}
     </update>
 
@@ -42,9 +42,14 @@
     </update>
 
     <!-- 커플 테이블에 커플 추가 -->
-    <insert id="createCouple" parameterType="CoupleDTO">
-        INSERT INTO Couple (user1Id, user2Id, startDate)
-        VALUES (#{user1Id}, #{user2Id}, NOW())
+    <insert id="createCouple" parameterType="CoupleDto" useGeneratedKeys="true" keyProperty="coupleId">
+        INSERT INTO Couple (user1Id, user2Id)
+        VALUES (#{user1Id}, #{user2Id})
     </insert>
+
+    <!-- 신청 조회 -->
+    <select id="getRequestById" parameterType="Long">
+        select * from CoupleRequest where requestId = #{requestId}
+    </select>
 
 </mapper>

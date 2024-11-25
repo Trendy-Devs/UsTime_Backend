@@ -27,8 +27,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/userinfo").authenticated() // /userinfo는 인증 필요
-                        .anyRequest().permitAll()                         // 그 외 모든 요청 허용
+                        .requestMatchers("/user/userinfo","couple/request","couple/getrequest","couple/approve","couple/decline").authenticated() // 인증 필요
+                        .anyRequest().permitAll()  // 그 외 모든 요청 허용
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

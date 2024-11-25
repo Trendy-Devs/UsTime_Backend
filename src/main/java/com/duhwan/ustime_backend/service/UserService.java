@@ -39,10 +39,8 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
         );
-
         // 인증 성공 시 사용자 정의 UserDetails로 캐스팅
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-
         // JWT 생성
         return jwtUtil.generateToken(customUserDetails);
     }
