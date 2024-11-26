@@ -12,8 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration      // 빈에 등록하는 어노테이션
 @EnableWebSecurity  // 시큐리티 활성시 해당파일에서 설정을 하겠다.
@@ -23,21 +26,21 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService userDetailsService; // CustomUserDetailsService를 주입받습니다.
 
+    // CORS 세부 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/userinfo/**","/couple/request/**","/couple/getrequest/**","/couple/approve/**","/couple/decline/**").authenticated() // 인증 필요
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/user/userinfo/**", "/couple/request/**", "/couple/getrequest/**", "/couple/approve/**", "/couple/decline/**").authenticated()  // 인증 필요
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // OPTIONS 요청 허용
                         .anyRequest().permitAll()  // 그 외 모든 요청 허용
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);  // JWT 필터 설정
 
         return http.build();
     }
-
-
 
     // AuthenticationManager 빈 설정
     @Bean
@@ -49,18 +52,18 @@ public class SecurityConfig {
         return authenticationManagerBuilder.build();
     }
 
-    // CORS 세부 설정
+    // CORS 설정을 위한 CorsConfigurationSource bean
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")  // 모든 경로에 대해 CORS 허용
-                        .allowedOrigins("http://localhost:3000","https://www.ustime.store")
-                        .allowedMethods("*")  // 허용할 HTTP 메서드
-                        .allowedHeaders("*")  // 허용할 헤더
-                        .allowCredentials(true);  // 쿠키와 같은 자격 증명을 포함
-            }
-        };
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://www.ustime.store"));
+        configuration.setAllowedMethods(List.of("*"));  // 허용할 HTTP 메서드
+        configuration.setAllowedHeaders(List.of("*"));  // 허용할 헤더
+        configuration.setAllowCredentials(true);  // 자격 증명 허용
+
+        // 경로에 대해 CORS 설정 적용
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
