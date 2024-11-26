@@ -4,6 +4,7 @@ import com.duhwan.ustime_backend.config.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/user/userinfo/**","/couple/request/**","/couple/getrequest/**","/couple/approve/**","/couple/decline/**").authenticated() // 인증 필요
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().permitAll()  // 그 외 모든 요청 허용
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -54,8 +56,8 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")  // 모든 경로에 대해 CORS 허용
-                        .allowedOrigins("http://localhost:3000","https://www.ustime-backend.store","https://www.ustime.store")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")  // 허용할 HTTP 메서드
+                        .allowedOrigins("http://localhost:3000","https://www.ustime.store")
+                        .allowedMethods("*")  // 허용할 HTTP 메서드
                         .allowedHeaders("*")  // 허용할 헤더
                         .allowCredentials(true);  // 쿠키와 같은 자격 증명을 포함
             }
