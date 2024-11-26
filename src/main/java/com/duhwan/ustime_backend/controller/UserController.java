@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -26,9 +28,9 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인")
-    public ResponseEntity<String> login(@RequestBody LoginDto dto) {
-        String token = userService.login(dto);
-        return ResponseEntity.ok(token);
+    public ResponseEntity<Map<String,Object>> login(@RequestBody LoginDto dto) {
+        Map<String,Object> result = userService.login(dto);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/userinfo")

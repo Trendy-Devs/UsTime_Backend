@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -34,7 +36,7 @@ public class UserService {
     }
 
     // 로그인
-    public String login(LoginDto loginDto) {
+    public Map<String, Object> login(LoginDto loginDto) {
         // 사용자 인증
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
@@ -42,7 +44,13 @@ public class UserService {
         // 인증 성공 시 사용자 정의 UserDetails로 캐스팅
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         // JWT 생성
-        return jwtUtil.generateToken(customUserDetails);
+        String token = jwtUtil.generateToken(customUserDetails);
+        Long userId = customUserDetails.getUserId();
+        String name = customUserDetails.getUsername();
+        String email = customUserDetails.getEmail();
+
+
+        return Map.of("token", token,"userId",userId,"name",name,"email",email);
     }
 
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.duhwan.ustime_backend.dao.ScheduleMapper">
+
+    <!-- 일정 조회 (특정 날짜의 일정) -->
+    <select id="selectSchedulesForDate" resultType="ScheduleDto">
+        SELECT * FROM Schedule
+        WHERE coupleId = #{coupleId}
+          AND startDate = #{date}
+          AND scope = '공유'
+    </select>
+
+    <!-- 일정 추가 -->
+    <insert id="insertSchedule">
+        INSERT INTO Schedule (coupleId, title, description, startDate, endDate, label, location, createdBy, scope)
+        VALUES (#{coupleId}, #{title}, #{description}, #{startDate}, #{endDate}, #{label}, #{location}, #{createdBy}, #{scope})
+    </insert>
+
+    <!-- 일정 수정 -->
+    <update id="updateSchedule">
+        UPDATE Schedule
+        SET title = #{title},
+            description = #{description},
+            startDate = #{startDate},
+            endDate = #{endDate},
+            label = #{label},
+            location = #{location}
+        WHERE scheduleId = #{scheduleId}
+    </update>
+
+    <!-- 일정 삭제 -->
+    <delete id="deleteSchedule">
+        DELETE FROM Schedule WHERE scheduleId = #{scheduleId}
+    </delete>
+
+
+</mapper>
