@@ -52,7 +52,7 @@ public class CoupleController {
     }
 
     @Operation(summary = "유저 검색")
-    @PutMapping("/search")
+    @GetMapping("/search")
     public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String name) {
         List<UserDto> users = service.searchUsers(name);
         return ResponseEntity.ok(users);
