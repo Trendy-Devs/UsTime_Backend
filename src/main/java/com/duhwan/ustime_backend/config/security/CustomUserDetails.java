@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -23,7 +22,6 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 권한 리스트를 반환합니다. 이후에 role이 필요할경우 수정예정
-        // return List.of(() -> "ROLE_USER");
         return Collections.emptyList();
     }
 
@@ -65,4 +63,12 @@ public class CustomUserDetails implements UserDetails {
         return user.getUserId();
     }
 
+    public Long getCoupleId() {
+        return user.getCoupleId();
+    }
+
+    // coupleId를 갱신하는 메서드 추가
+    public void setCoupleId(Long coupleId) {
+        user.setCoupleId(coupleId); // UserDto의 coupleId 갱신
+    }
 }

@@ -52,4 +52,9 @@
         select * from CoupleRequest where requestId = #{requestId}
     </select>
 
+    <!-- 유저 조회 -->
+    <select id="searchUsers">
+        select userId, name from User WHERE name LIKE CONCAT('%', #{name}, '%');;
+    </select>
+
 </mapper>

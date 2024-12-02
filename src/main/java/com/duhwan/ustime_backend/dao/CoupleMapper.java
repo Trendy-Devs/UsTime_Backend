@@ -3,6 +3,7 @@ package com.duhwan.ustime_backend.dao;
 import com.duhwan.ustime_backend.dto.CoupleResponseDto;
 import com.duhwan.ustime_backend.dto.CoupleDto;
 import com.duhwan.ustime_backend.dto.CoupleRequestDto;
+import com.duhwan.ustime_backend.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface CoupleMapper {
     void createCouple(CoupleDto coupleDTO);
 
     CoupleRequestDto getRequestById(Long requestId);
+
+    List<UserDto> searchUsers(String name);
 }

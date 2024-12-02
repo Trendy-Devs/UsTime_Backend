@@ -2,6 +2,7 @@ package com.duhwan.ustime_backend.controller;
 
 import com.duhwan.ustime_backend.dto.CoupleResponseDto;
 import com.duhwan.ustime_backend.dto.CoupleRequestDto;
+import com.duhwan.ustime_backend.dto.UserDto;
 import com.duhwan.ustime_backend.service.CoupleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/couple")
-@Tag(name ="Couple API", description ="커플 관련 기능을 제공하는 API")
+@Tag(name ="커플 API", description ="커플 관련 기능을 제공하는 API")
 public class CoupleController {
 
     private final CoupleService service;
@@ -48,5 +49,12 @@ public class CoupleController {
     public ResponseEntity<String> declineCoupleReqest(@RequestParam Long requestId) {
         service.declineCoupleRequest(requestId);
         return ResponseEntity.ok("커플 신청이 거절되었습니다.");
+    }
+
+    @Operation(summary = "유저 검색")
+    @PutMapping("/search")
+    public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String name) {
+        List<UserDto> users = service.searchUsers(name);
+        return ResponseEntity.ok(users);
     }
 }

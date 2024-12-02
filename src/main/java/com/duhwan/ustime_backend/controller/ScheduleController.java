@@ -2,51 +2,44 @@ package com.duhwan.ustime_backend.controller;
 
 import com.duhwan.ustime_backend.dto.ScheduleDto;
 import com.duhwan.ustime_backend.service.ScheduleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/calendar")
+@Tag(name ="스케줄 API", description ="캘린더 관련 기능을 제공하는 API")
 public class ScheduleController {
 
     private final ScheduleService service;
 
-//    // 일정 조회 (전체)
-//    @GetMapping("selectall")
-//    public ResponseEntity<List<ScheduleDto>> getAllSchedules() {
-//        return ResponseEntity.ok(service.getAllSchedules());
-//    }
-//
-//    // 특정 일정 조회
-//    @GetMapping("/select/{id}")
-//    public ResponseEntity<ScheduleDto> getScheduleById(@PathVariable Long id) {
-//        return ResponseEntity.ok(service.getScheduleById(id));
-//    }
+    @Operation(summary = "전체 일정 조회")
+    @GetMapping("/all")
+    public ResponseEntity<List<ScheduleDto>> getAllSchedulesForCalendar() {
+        List<ScheduleDto> result = service.getAllSchedulesForCalendar();
+        return ResponseEntity.ok(result);
+    }
 
-    // 일정 생성
+    @Operation(summary = "특정 날짜 일정 조회")
+    @GetMapping("/{date}")
+    public ResponseEntity<List<ScheduleDto>> getSchedulesByDate(@PathVariable String date) {
+            List<ScheduleDto> result = service.getSchedulesByDate(date);
+        return ResponseEntity.ok(result);
+    }
+
+    @Operation(summary = "일정 생성")
     @PostMapping("/create")
     public ResponseEntity<Void> createSchedule(@RequestBody ScheduleDto dto) {
         service.createSchedule(dto);
         return ResponseEntity.ok().build();
     }
 
-//    // 일정 수정
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<ScheduleDto> updateSchedule(@PathVariable Long id, @RequestBody ScheduleDto scheduleDto) {
-//        ScheduleDto updatedSchedule = service.updateSchedule(id, scheduleDto);
-//        return ResponseEntity.ok(updatedSchedule);
-//    }
-//
-//    // 일정 삭제
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
-//        service.deleteSchedule(id);
-//        return ResponseEntity.noContent().build();
-//    }
 
 
 
