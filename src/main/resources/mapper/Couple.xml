@@ -5,25 +5,15 @@
 <mapper namespace="com.duhwan.ustime_backend.dao.CoupleMapper">
 
     <!-- 커플 신청 추가 -->
-    <insert id="createCoupleRequest" parameterType="CoupleRequestDto">
+    <insert id="createCoupleRequest" parameterType="CoupleRequestDto" useGeneratedKeys="true" keyProperty="requestId">
         INSERT INTO CoupleRequest (fromUserId, toUserId, status)
         VALUES (#{fromUserId}, #{toUserId}, '대기')
     </insert>
 
-    <!-- 특정 사용자가 보낸 또는 받은 커플 신청 조회 -->
-    <select id="getCoupleRequests" resultType="CoupleResponseDto">
-        SELECT cr.requestId,u1.name As fromUserName, u2.name AS toUserName, cr.status, cr.requestedAt
-        FROM CoupleRequest cr
-                 JOIN User u1 ON cr.fromUserId = u1.userId
-                 JOIN User u2 ON cr.toUserId = u2.userId
-        WHERE (cr.fromUserId = #{userId} OR cr.toUserId = #{userId})
-          AND cr.status = '대기'
-    </select>
-
     <!-- 커플 신청 승인 -->
     <update id="approveCoupleRequest" parameterType="Long">
         UPDATE CoupleRequest
-        SET status = '승인',respondedAt = CURRENT_TIMESTAMP
+        SET status = '승인', respondedAt = CURRENT_TIMESTAMP
         WHERE requestId = #{requestId}
     </update>
 
@@ -52,9 +42,15 @@
         select * from CoupleRequest where requestId = #{requestId}
     </select>
 
+    <!-- 커플 신청 목록 조회 -->
+    <select id="getCoupleRequests" parameterType="Long" resultType="CoupleResponseDto">
+        SELECT * FROM CoupleRequest
+        WHERE toUserId = #{userId} AND status = '대기'
+    </select>
+
     <!-- 유저 조회 -->
     <select id="searchUsers">
-        select userId, name from User WHERE name LIKE CONCAT('%', #{name}, '%');;
+        select userId, name from User WHERE name LIKE CONCAT('%', #{name}, '%');
     </select>
 
 </mapper>

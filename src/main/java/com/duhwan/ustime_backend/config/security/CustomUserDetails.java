@@ -63,12 +63,4 @@ public class CustomUserDetails implements UserDetails {
         return user.getUserId();
     }
 
-    public Long getCoupleId() {
-        return user.getCoupleId();
-    }
-
-    // coupleId를 갱신하는 메서드 추가
-    public void setCoupleId(Long coupleId) {
-        user.setCoupleId(coupleId); // UserDto의 coupleId 갱신
-    }
 }

@@ -24,7 +24,7 @@
     </select>
 
     <!-- 일정 추가 -->
-    <insert id="insertSchedule">
+    <insert id="insertSchedule" useGeneratedKeys="true" keyProperty="scheduleId">
         INSERT INTO Schedule (coupleId, title, description, startDate, endDate, label, location, createdBy, scope)
         VALUES (#{coupleId}, #{title}, #{description}, #{startDate}, #{endDate}, #{label}, #{location}, #{createdBy}, #{scope})
     </insert>
@@ -45,6 +45,7 @@
     <delete id="deleteSchedule">
         DELETE FROM Schedule WHERE scheduleId = #{scheduleId}
     </delete>
+
 
 
 </mapper>
