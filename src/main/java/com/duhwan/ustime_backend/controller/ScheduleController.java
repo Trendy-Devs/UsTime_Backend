@@ -29,7 +29,7 @@ public class ScheduleController {
 
     @Operation(summary = "특정 날짜 일정 조회")
     @GetMapping("/{date}")
-    public ResponseEntity<List<ScheduleDto>> getSchedulesByDate(Long coupleId,@PathVariable("date") String date) {
+    public ResponseEntity<List<ScheduleDto>> getSchedulesByDate(@RequestParam Long coupleId,@PathVariable("date") String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         List<ScheduleDto> result = service.getSchedulesByDate(coupleId,localDate);
         return ResponseEntity.ok(result);

@@ -14,13 +14,7 @@
 
     <!-- 일정 전체조회 -->
     <select id="getAllSchedulesForCalendar" resultType="ScheduleDto">
-        SELECT
-            scheduleId,
-            startDate,
-            label,
-            title
-        FROM
-            Schedule;
+        SELECT * FROM Schedule;
     </select>
 
     <!-- 일정 추가 -->
