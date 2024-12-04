@@ -37,9 +37,9 @@ public class ScheduleController {
 
     @Operation(summary = "일정 생성")
     @PostMapping("/create")
-    public ResponseEntity<Void> createSchedule(@RequestBody ScheduleDto dto) {
+    public ResponseEntity<String> createSchedule(@RequestBody ScheduleDto dto) {
         service.createSchedule(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("일정이 생성되었습니다.");
     }
 
 

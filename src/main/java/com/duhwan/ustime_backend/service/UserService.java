@@ -46,11 +46,12 @@ public class UserService {
         // JWT 생성
         String token = jwtUtil.generateToken(customUserDetails);
         Long userId = customUserDetails.getUserId();
+        Long coupleId = dao.getCoupleId(userId);
         String name = customUserDetails.getUsername();
         String email = customUserDetails.getEmail();
 
 
-        return Map.of("token", token,"userId",userId,"name",name,"email",email);
+        return Map.of("token", token,"userId",userId,"coupleId", coupleId,"name",name,"email",email);
     }
 
 

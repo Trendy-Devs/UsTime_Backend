@@ -13,4 +13,6 @@ public interface UserMapper {
 
     UserDto findByEmail(String email);
 
+    Long getCoupleId(Long userId);
+
 }
