@@ -13,5 +13,6 @@ public interface ScheduleMapper {
     void insertSchedule(ScheduleDto dto);
     List<ScheduleDto> getAllSchedulesForCalendar();
     List<ScheduleDto> getSchedulesByDate(Long coupleId, LocalDate date);
-
+    void updateSchedule(ScheduleDto dto);
+    void deleteSchedule(Long scheduleId);
 }

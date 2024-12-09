@@ -1,6 +1,5 @@
 package com.duhwan.ustime_backend.controller;
 
-import com.duhwan.ustime_backend.dto.CoupleResponseDto;
 import com.duhwan.ustime_backend.dto.CoupleRequestDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import com.duhwan.ustime_backend.service.CoupleService;
@@ -18,7 +17,7 @@ import java.util.List;
 @Tag(name ="커플 API", description ="커플 관련 기능을 제공하는 API")
 public class CoupleController {
 
-    private final CoupleService service;
+    private final CoupleService coupleService;
 
     // 커플 신청
     @PostMapping("/request")
@@ -27,7 +26,7 @@ public class CoupleController {
         CoupleRequestDto dto = new CoupleRequestDto();
         dto.setFromUserId(fromUserId);
         dto.setToUserId(toUserId);
-        service.createCoupleRequest(dto);
+        coupleService.createCoupleRequest(dto);
         return ResponseEntity.ok("커플 신청이 성공적으로 추가되었습니다.");
     }
 
@@ -35,7 +34,7 @@ public class CoupleController {
     @PutMapping("/approve")
     @Operation(summary = "커플 승인")
     public ResponseEntity<String> approveCoupleRequest(@RequestParam Long requestId) {
-        service.approveCoupleRequest(requestId);
+        coupleService.approveCoupleRequest(requestId);
         return ResponseEntity.ok("커플 신청이 승인되었습니다.");
     }
 
@@ -43,7 +42,7 @@ public class CoupleController {
     @PutMapping("/decline")
     @Operation(summary = "커플 거절")
     public ResponseEntity<String> declineCoupleRequest(@RequestParam Long requestId) {
-        service.declineCoupleRequest(requestId);
+        coupleService.declineCoupleRequest(requestId);
         return ResponseEntity.ok("커플 신청이 거절되었습니다.");
     }
 
@@ -51,7 +50,7 @@ public class CoupleController {
     @GetMapping("/search")
     @Operation(summary = "유저 검색")
     public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String name) {
-        List<UserDto> users = service.searchUsers(name);
+        List<UserDto> users = coupleService.searchUsers(name);
         return ResponseEntity.ok(users);
     }
 }

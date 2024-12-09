@@ -15,12 +15,31 @@
         WHERE userId=#{userId}
     </select>
 
+    <update id="updateUser" parameterType="UserDto">
+        UPDATE User
+        <set>
+            <trim suffixOverrides=",">
+                <if test="email != null">email = #{email},</if>
+                <if test="name != null">name = #{name},</if>
+                <if test="phone != null">phone = #{phone},</if>
+                <if test="birthdate != null">birthdate = #{birthdate},</if>
+                <if test="gender != null">gender = #{gender},</if>
+            </trim>
+        </set>
+        WHERE userId = #{userId}
+    </update>
+
+    <update id="updatePassword" parameterType="ChangePasswordDto">
+        UPDATE User
+        SET password = #{newPassword}
+        WHERE userId = #{userId}
+    </update>
+
     <select id="getCoupleId" resultType="Long">
         SELECT coupleId
         FROM User
         WHERE userId=#{userId}
     </select>
-
 
     <!--이메일로 유저아이디 찾기-->
     <select id="findByEmail" parameterType="String" resultType="UserDto">

@@ -1,11 +1,13 @@
 package com.duhwan.ustime_backend.controller;
 
+import com.duhwan.ustime_backend.dto.ChangePasswordDto;
 import com.duhwan.ustime_backend.dto.LoginDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import com.duhwan.ustime_backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,4 +42,21 @@ public class UserController {
         return ResponseEntity.ok(userInfo);
     }
 
+    @PutMapping("/update")
+    @Operation(summary = "유저 정보수정")
+    public ResponseEntity<String> updateUserInfo(@RequestBody UserDto dto) {
+        userService.updateUserInfo(dto);
+        return ResponseEntity.ok("유저 정보수정이 완료되었습니다.");
+    }
+
+    @PutMapping("/changePassword")
+    @Operation(summary = "비밀번호 변경하기")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        try {
+            userService.changePassword(changePasswordDto);
+            return ResponseEntity.ok("비밀번호가 변경되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비밀번호 변경 실패");
+        }
+    }
 }

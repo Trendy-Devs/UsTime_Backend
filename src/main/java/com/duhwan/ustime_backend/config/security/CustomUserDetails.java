@@ -19,6 +19,15 @@ public class CustomUserDetails implements UserDetails {
         return new CustomUserDetails(user);
     }
 
+    public void updateName(String name) {
+        this.user.setName(name);
+    }
+
+    public void updateEmail(String email) {
+        this.user.setEmail(email);
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 권한 리스트를 반환합니다. 이후에 role이 필요할경우 수정예정

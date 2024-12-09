@@ -10,8 +10,6 @@
         VALUES (#{userId}, #{type}, #{message}, #{status}, #{createdAt});
     </insert>
 
-
-
     <!-- 알림 조회 -->
     <select id="getNotifications" resultType="NotificationDto">
         SELECT * FROM Notification WHERE userId = #{userId}

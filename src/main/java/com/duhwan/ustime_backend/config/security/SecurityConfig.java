@@ -33,9 +33,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/userinfo/**", "/couple/request/**", "/couple/getrequest/**", "/couple/approve/**", "/couple/decline/**").authenticated()  // 인증 필요
+                        .requestMatchers("/user/login/**", "/user/signup/**").permitAll()  // 요청 허용
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // OPTIONS 요청 허용
-                        .anyRequest().permitAll()  // 그 외 모든 요청 허용
+                        .anyRequest().authenticated()  // 그 외 모든 요청 인증
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);  // JWT 필터 설정
 

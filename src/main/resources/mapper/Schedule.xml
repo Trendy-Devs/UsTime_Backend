@@ -24,16 +24,22 @@
     </insert>
 
     <!-- 일정 수정 -->
-    <update id="updateSchedule">
+    <update id="updateSchedule" parameterType="ScheduleDto">
         UPDATE Schedule
-        SET title = #{title},
-            description = #{description},
-            startDate = #{startDate},
-            endDate = #{endDate},
-            label = #{label},
-            location = #{location}
+        <set>
+            <trim suffixOverrides=",">
+                <if test="title != null">title = #{title},</if>
+                <if test="description != null">description = #{description},</if>
+                <if test="startDate != null">startDate = #{startDate},</if>
+                <if test="endDate != null">endDate = #{endDate},</if>
+                <if test="label != null">label = #{label},</if>
+                <if test="location != null">location = #{location},</if>
+                <if test="scope != null">scope = #{scope}</if>
+            </trim>
+        </set>
         WHERE scheduleId = #{scheduleId}
     </update>
+
 
     <!-- 일정 삭제 -->
     <delete id="deleteSchedule">

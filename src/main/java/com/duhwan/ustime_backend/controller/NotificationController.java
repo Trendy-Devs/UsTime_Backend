@@ -18,7 +18,6 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-
     // 알림 조회 API
     @GetMapping("/getNotify")
     @Operation(summary = "알림 조회")
