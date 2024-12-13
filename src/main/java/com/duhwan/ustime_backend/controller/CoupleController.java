@@ -23,6 +23,9 @@ public class CoupleController {
     @PostMapping("/request")
     @Operation(summary = "커플 신청")
     public ResponseEntity<String> createCoupleRequest(@RequestParam Long fromUserId, @RequestParam Long toUserId) {
+        if (coupleService.existCouple(fromUserId) || coupleService.existCouple(toUserId)) {
+            return ResponseEntity.badRequest().body("이미 커플 상태입니다. 요청을 보낼 수 없습니다.");
+        }
         CoupleRequestDto dto = new CoupleRequestDto();
         dto.setFromUserId(fromUserId);
         dto.setToUserId(toUserId);
@@ -53,4 +56,12 @@ public class CoupleController {
         List<UserDto> users = coupleService.searchUsers(name);
         return ResponseEntity.ok(users);
     }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "커플 삭제")
+    public ResponseEntity<String> deleteCouple(@RequestParam Long CoupleId) {
+        coupleService.deleteCouple(CoupleId);
+        return ResponseEntity.ok("커플이 삭제 되었습니다.");
+    }
+
 }

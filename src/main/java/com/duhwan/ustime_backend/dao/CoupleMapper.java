@@ -15,7 +15,7 @@ public interface CoupleMapper {
 
     void createCoupleRequest(CoupleRequestDto coupleRequestDTO);
 
-    List<CoupleResponseDto> getCoupleRequests(Long userId);
+    Long getCoupleRequests(Long userId);
 
     void approveCoupleRequest(Long requestId);
 
@@ -28,6 +28,10 @@ public interface CoupleMapper {
     CoupleRequestDto getRequestById(Long requestId);
 
     List<UserDto> searchUsers(String name);
+
+    void deleteCouple(Long coupleId);
+
+    CoupleDto getCoupleById(Long coupleId);
 
     // 알림 생성
     void createNotification(NotificationDto notificationDTO);

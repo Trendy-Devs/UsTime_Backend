@@ -20,4 +20,6 @@ public interface NotificationMapper {
 
     // 알림 삭제
     void deleteNotification(Long notificationId);
+
+    Long getUserId(Long notificationId);
 }

@@ -1,9 +1,9 @@
 package com.duhwan.ustime_backend.service;
 
 import com.duhwan.ustime_backend.dao.CoupleMapper;
+import com.duhwan.ustime_backend.dao.UserMapper;
 import com.duhwan.ustime_backend.dto.CoupleDto;
 import com.duhwan.ustime_backend.dto.CoupleRequestDto;
-import com.duhwan.ustime_backend.dto.CoupleResponseDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,11 +19,12 @@ public class CoupleService {
 
     private final CoupleMapper coupleMapper;
     private final NotificationService notificationService;
+    private final UserMapper userMapper;
 
     // 커플 신청
     public void createCoupleRequest(CoupleRequestDto dto) {
-        List<CoupleResponseDto> existRequests = coupleMapper.getCoupleRequests(dto.getToUserId());
-        if (!existRequests.isEmpty()) {
+        Long existRequests = coupleMapper.getCoupleRequests(dto.getToUserId());
+        if (existRequests != null) {
             throw new IllegalArgumentException("이미 대기 중인 신청이 있습니다.");
         }
         coupleMapper.createCoupleRequest(dto);
@@ -32,7 +33,7 @@ public class CoupleService {
         Long requestId = dto.getRequestId();
 
         // 알림 생성: 상대방에게 알림
-        notificationService.createNotification(dto.getToUserId(), "커플 신청", "새로운 커플 요청이 왔습니다.");
+        notificationService.createNotification(dto.getToUserId(), "커플 신청", requestId, "새로운 커플 요청이 왔습니다.");
     }
 
     // 커플 신청 승인
@@ -61,8 +62,8 @@ public class CoupleService {
         ));
 
         // 알림 생성: 신청자와 승인자에게 알림
-        notificationService.createNotification(request.getFromUserId(), "커플 승인", "커플 요청이 승인되었습니다.");
-        notificationService.createNotification(request.getToUserId(), "커플 승인", "커플 요청이 승인되었습니다.");
+        notificationService.createNotification(request.getFromUserId(), "커플 승인", requestId,"커플 요청이 승인되었습니다.");
+        notificationService.createNotification(request.getToUserId(), "커플 승인", requestId,"커플 요청이 승인되었습니다.");
     }
 
     // 커플 신청 거절
@@ -75,8 +76,8 @@ public class CoupleService {
         coupleMapper.declineCoupleRequest(requestId);
 
         // 알림 생성: 거절자와 신청자에게 알림
-        notificationService.createNotification(request.getFromUserId(), "커플 거절", "커플 요청이 거절되었습니다.");
-        notificationService.createNotification(request.getToUserId(), "커플 거절", "커플 요청이 거절되었습니다.");
+        notificationService.createNotification(request.getFromUserId(), "커플 거절", requestId,"커플 요청이 거절되었습니다.");
+        notificationService.createNotification(request.getToUserId(), "커플 거절", requestId, "커플 요청이 거절되었습니다.");
     }
 
     // 유저 찾기
@@ -88,5 +89,20 @@ public class CoupleService {
                         .name(user.getName())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    // 커플 유무 찾기
+    public boolean existCouple(Long userId) {
+        Long existCouple = userMapper.getCoupleId(userId);
+        return existCouple != null;
+    }
+
+    public void deleteCouple(Long coupleId) {
+        // 1. 커플이 존재하는지 확인
+        CoupleDto couple = coupleMapper.getCoupleById(coupleId);
+        if (couple == null) {
+            throw new IllegalArgumentException("커플을 찾을 수 없습니다.");
+        }
+        coupleMapper.deleteCouple(coupleId);
     }
 }

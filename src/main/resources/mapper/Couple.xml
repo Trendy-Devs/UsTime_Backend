@@ -43,14 +43,24 @@
     </select>
 
     <!-- 커플 신청 목록 조회 -->
-    <select id="getCoupleRequests" parameterType="Long" resultType="CoupleResponseDto">
-        SELECT * FROM CoupleRequest
+    <select id="getCoupleRequests" parameterType="Long" resultType="Long">
+        SELECT requestId FROM CoupleRequest
         WHERE toUserId = #{userId} AND status = '대기'
     </select>
 
     <!-- 유저 조회 -->
     <select id="searchUsers">
-        select userId, name from User WHERE name LIKE CONCAT('%', #{name}, '%');
+        select userId, name from User WHERE name LIKE CONCAT('%', #{name}, '%')
     </select>
+
+    <!-- 커플 존재하는지 조회 -->
+    <select id="getCoupleById">
+        select * from Couple WHERE coupleId = #{coupleId}
+    </select>
+
+    <!-- 커플 삭제하기 -->
+    <delete id="deleteCouple">
+        DELETE FROM Couple WHERE coupleId = #{coupleId}
+    </delete>
 
 </mapper>

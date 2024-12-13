@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface ScheduleMapper {
@@ -15,4 +14,5 @@ public interface ScheduleMapper {
     List<ScheduleDto> getSchedulesByDate(Long coupleId, LocalDate date);
     void updateSchedule(ScheduleDto dto);
     void deleteSchedule(Long scheduleId);
+    ScheduleDto getScheduleById(Long typeId);
 }

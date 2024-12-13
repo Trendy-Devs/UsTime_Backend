@@ -6,8 +6,8 @@
 
     <!-- 알림 생성 (커플 신청, 승인, 거절) -->
     <insert id="createNotification" parameterType="NotificationDto">
-        INSERT INTO Notification (userId, type, message, status, createdAt)
-        VALUES (#{userId}, #{type}, #{message}, #{status}, #{createdAt});
+        INSERT INTO Notification (userId, type, typeId,message, status, createdAt)
+        VALUES (#{userId}, #{type}, #{typeId}, #{message}, #{status}, #{createdAt});
     </insert>
 
     <!-- 알림 조회 -->
@@ -16,6 +16,10 @@
         ORDER BY createdAt DESC;
     </select>
 
+    <!-- 유저 반환 -->
+    <select id="getUserId" resultType="Long">
+        SELECT userId FROM Notification WHERE notificationId = #{notificationId}
+    </select>
     <!-- 알림 상태 업데이트 (읽음 처리) -->
     <update id="updateNotificationStatus" parameterType="map">
         UPDATE Notification
@@ -27,5 +31,7 @@
     <delete id="deleteNotification" parameterType="long">
         DELETE FROM Notification WHERE notificationId = #{notificationId};
     </delete>
+
+
 
 </mapper>

@@ -16,6 +16,7 @@ public class NotificationDto {
     private Long notificationId;  // 알림 고유 ID
     private Long userId;          // 알림을 받을 사용자 ID
     private String type;          // 알림 유형
+    private Long typeId;           // 타입 ID
     private String message;       // 알림 내용
     private String status;        // 알림 상태
     private LocalDateTime createdAt; // 생성 일시

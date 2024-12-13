@@ -4,6 +4,7 @@ import com.duhwan.ustime_backend.dto.ScheduleDto;
 import com.duhwan.ustime_backend.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class ScheduleController {
 
     @Operation(summary = "일정 생성")
     @PostMapping("/create")
-    public ResponseEntity<String> createSchedule(@RequestBody ScheduleDto dto) {
+    public ResponseEntity<String> createSchedule(@Valid @RequestBody ScheduleDto dto) {
         scheduleService.createSchedule(dto);
         return ResponseEntity.ok("일정이 생성되었습니다.");
     }

@@ -40,12 +40,14 @@
         WHERE scheduleId = #{scheduleId}
     </update>
 
-
     <!-- 일정 삭제 -->
     <delete id="deleteSchedule">
         DELETE FROM Schedule WHERE scheduleId = #{scheduleId}
     </delete>
 
-
+    <!-- 스케줄 ID로 일정보기 -->
+    <select id="getScheduleById" resultType="ScheduleDto">
+        SELECT * FROM Schedule WHERE scheduleId = #{typeId}
+    </select>
 
 </mapper>

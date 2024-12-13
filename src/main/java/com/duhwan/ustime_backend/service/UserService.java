@@ -14,7 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,14 +42,23 @@ public class UserService {
         );
         // 인증 성공 시 사용자 정의 UserDetails로 캐스팅
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        // JWT 생성
         String token = jwtUtil.generateToken(customUserDetails);
         Long userId = customUserDetails.getUserId();
+        // coupleId가 null인 경우 Map에 포함시키지 않음
         Long coupleId = userMapper.getCoupleId(userId);
         String name = customUserDetails.getUsername();
         String email = customUserDetails.getEmail();
 
-        return Map.of("token", token,"userId",userId,"coupleId", coupleId,"name",name,"email",email);
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", userId);
+        response.put("name", name);
+        response.put("email", email);
+
+        if (coupleId != null) {
+            response.put("coupleId", coupleId);  // coupleId가 존재하면 포함
+        }
+        return response;
     }
 
     //내정보 보기

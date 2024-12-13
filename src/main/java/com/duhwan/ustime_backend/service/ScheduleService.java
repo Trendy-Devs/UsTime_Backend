@@ -4,6 +4,7 @@ import com.duhwan.ustime_backend.dao.ScheduleMapper;
 import com.duhwan.ustime_backend.dto.ScheduleDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +17,7 @@ public class ScheduleService {
     private final NotificationService notificationService;
 
     // 일정 생성
+    @Transactional
     public void createSchedule(ScheduleDto dto) {
         // coupleId가 유효한지 확인 (Couple 테이블에 존재하는지 확인)
         if (dto.getCoupleId() == null) {
@@ -25,15 +27,18 @@ public class ScheduleService {
         scheduleMapper.insertSchedule(dto);
         // 알림 생성: 일정 생성 알림
         String message = "새로운 일정이 생성되었습니다.";
+        Long scheduleId = dto.getScheduleId();
         Long userId = dto.getCreatedBy();  // 일정 생성자의 ID
         // 알림 생성: "일정 생성" 유형으로 알림 전송
         notificationService.createNotification(
                 userId,
                 "일정 생성",  // 알림 유형
+                scheduleId,
                 message      // 알림 메시지
         );
     }
 
+    @Transactional
     public void updateSchedule(ScheduleDto dto) {
         scheduleMapper.updateSchedule(dto);
     }
