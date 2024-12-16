@@ -58,10 +58,10 @@ public class NotificationService {
     public <T> T getDetail(String type, Long typeId) {
         switch (type) {
             case "커플":
-                return (T) coupleMapper.getRequestById(typeId); // T를 CoupleRequestDto로 캐스팅
+                return (T) coupleMapper.getRequestInfo(typeId);
             case "일정":
                 ScheduleDto result = scheduleMapper.getScheduleById(typeId);
-                return (T) result; // T를 ScheduleDto로 캐스팅
+                return (T) result;
             default:
                 throw new IllegalArgumentException("유효하지 않은 type: " + type);
         }

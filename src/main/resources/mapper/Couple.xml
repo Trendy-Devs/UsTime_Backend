@@ -63,4 +63,21 @@
         DELETE FROM Couple WHERE coupleId = #{coupleId}
     </delete>
 
+    <select id="getRequestInfo" resultType="CoupleResponseDto">
+        SELECT
+            cr.requestId,
+            fu.name AS fromUserName,
+            tu.name AS toUserName,
+            cr.status,
+            cr.requestedAt
+        FROM
+            CoupleRequest cr
+                JOIN
+            User fu ON cr.fromUserId = fu.userId
+                JOIN
+            User tu ON cr.toUserId = tu.userId
+        WHERE
+            cr.requestId = #{requestId}
+    </select>
+
 </mapper>

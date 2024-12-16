@@ -4,7 +4,6 @@ import com.duhwan.ustime_backend.dto.CoupleResponseDto;
 import com.duhwan.ustime_backend.dto.CoupleDto;
 import com.duhwan.ustime_backend.dto.CoupleRequestDto;
 import com.duhwan.ustime_backend.dto.UserDto;
-import com.duhwan.ustime_backend.dto.NotificationDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -27,12 +26,12 @@ public interface CoupleMapper {
 
     CoupleRequestDto getRequestById(Long requestId);
 
+    CoupleResponseDto getRequestInfo(Long requestId);
+
     List<UserDto> searchUsers(String name);
 
     void deleteCouple(Long coupleId);
 
     CoupleDto getCoupleById(Long coupleId);
 
-    // 알림 생성
-    void createNotification(NotificationDto notificationDTO);
 }
