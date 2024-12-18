@@ -5,8 +5,8 @@
 <mapper namespace="com.duhwan.ustime_backend.dao.UserMapper">
 
     <insert id="signUp" parameterType="UserDto">
-        INSERT INTO User(email, password, name, birthdate, gender, phone, createdAt)
-        VALUES(#{email}, #{password}, #{name}, #{birthdate}, #{gender}, #{phone}, #{createdAt})
+        INSERT INTO User(email, password, name, birthdate, gender, phone)
+        VALUES(#{email}, #{password}, #{name}, #{birthdate}, #{gender}, #{phone})
     </insert>
 
     <select id="selectUser" resultType="UserDto">

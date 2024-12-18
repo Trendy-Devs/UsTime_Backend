@@ -7,14 +7,66 @@
     <!-- 일정 조회 (특정 날짜의 일정) -->
     <select id="getSchedulesByDate" resultType="ScheduleDto">
         SELECT * FROM Schedule
-        WHERE coupleId = #{coupleId}
-          AND startDate = #{date}
-          AND scope = '공유'
+        WHERE createdBy = #{userId}
+        AND startDate &lt;= #{date}
+        AND endDate &gt;= #{date}
+        <!-- 개인 일정 (scope = '개인') -->
+        <if test="scope == '개인'">
+            AND scope = '개인'
+            <if test="coupleId == null">
+                AND coupleId IS NULL  <!-- 개인 일정은 커플 ID가 없을 수 있음 -->
+            </if>
+            <if test="coupleId != null">
+                AND coupleId = #{coupleId}  <!-- 개인 일정이라도 커플 ID가 있을 수 있음 -->
+            </if>
+        </if>
+        <!-- 공유 일정 (scope = '공유') -->
+        <if test="scope == '공유'">
+            AND scope = '공유'
+            AND coupleId = #{coupleId}  <!-- 공유 일정은 커플 ID가 있어야만 조회 -->
+        </if>
+        <!-- 전체 일정 (scope가 '개인' 또는 '공유') -->
+        <if test="scope == '전체'">
+            AND (scope = '개인' OR scope = '공유')
+            <!-- 전체일 때, coupleId가 없는 개인 일정도 포함 -->
+            <if test="coupleId != null">
+                AND coupleId = #{coupleId}  <!-- 커플 ID가 존재할 경우 해당 커플의 일정만 -->
+            </if>
+            <!-- coupleId가 없는 개인 일정도 포함 -->
+            <if test="coupleId == null">
+                AND coupleId IS NULL  <!-- 커플 ID가 없을 경우 개인 일정도 포함 -->
+            </if>
+        </if>
     </select>
 
-    <!-- 일정 전체조회 -->
-    <select id="getAllSchedulesForCalendar" resultType="ScheduleDto">
-        SELECT * FROM Schedule;
+
+    <!-- 개인 일정 조회 -->
+    <select id="getPersonalSchedules" resultType="ScheduleDto">
+        SELECT *
+        FROM Schedule
+        WHERE createdBy = #{userId}
+          AND (coupleId IS NULL OR scope = '개인');
+    </select>
+
+    <!-- 일정 스코프 별 조회 -->
+    <select id="getSchedulesByScope" resultType="ScheduleDto">
+        SELECT *
+        FROM Schedule
+        WHERE
+        <choose>
+            <!-- 전체: 개인 + 공유 일정 -->
+            <when test="scope == '전체'">
+                createdBy = #{userId} OR (coupleId = #{coupleId} AND scope = '공유')
+            </when>
+            <!-- 개인 일정만 -->
+            <when test="scope == '개인'">
+                createdBy = #{userId} AND (coupleId IS NULL OR scope = '개인')
+            </when>
+            <!-- 공유 일정만 -->
+            <when test="scope == '공유'">
+                coupleId = #{coupleId} AND scope = '공유'
+            </when>
+        </choose>
     </select>
 
     <!-- 일정 추가 -->

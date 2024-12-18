@@ -10,8 +10,9 @@ import java.util.List;
 public interface ScheduleMapper {
 
     void insertSchedule(ScheduleDto dto);
-    List<ScheduleDto> getAllSchedulesForCalendar();
-    List<ScheduleDto> getSchedulesByDate(Long coupleId, LocalDate date);
+    List<ScheduleDto> getPersonalSchedules(Long userId);
+    List<ScheduleDto> getSchedulesByScope(Long userId,Long coupleId, String scope);
+    List<ScheduleDto> getSchedulesByDate(Long userId, Long coupleId, LocalDate date, String scope);
     void updateSchedule(ScheduleDto dto);
     void deleteSchedule(Long scheduleId);
     ScheduleDto getScheduleById(Long typeId);

@@ -19,10 +19,6 @@ public class ScheduleService {
     // 일정 생성
     @Transactional
     public void createSchedule(ScheduleDto dto) {
-        // coupleId가 유효한지 확인 (Couple 테이블에 존재하는지 확인)
-        if (dto.getCoupleId() == null) {
-            throw new IllegalArgumentException("유효한 커플이 존재하지 않습니다.");
-        }
         // 일정 생성
         scheduleMapper.insertSchedule(dto);
         // 알림 생성: 일정 생성 알림
@@ -43,14 +39,19 @@ public class ScheduleService {
         scheduleMapper.updateSchedule(dto);
     }
 
-    // 캘린더에 표시될 모든 일정 가져오기
-    public List<ScheduleDto> getAllSchedulesForCalendar() {
-        return scheduleMapper.getAllSchedulesForCalendar();
+    // 캘린더에 표시될 스코프 별 모든 일정 가져오기
+    public List<ScheduleDto> getAllSchedulesForCalendar(Long userId, Long coupleId, String scope) {
+        if(coupleId == null) {
+            return scheduleMapper.getPersonalSchedules(userId);
+        } else {
+            return scheduleMapper.getSchedulesByScope(userId,coupleId,scope);
+        }
+
     }
 
     // 특정 커플의 특정 날짜에 해당하는 일정 가져오기
-    public List<ScheduleDto> getSchedulesByDate(Long coupleId, LocalDate date) {
-        return scheduleMapper.getSchedulesByDate(coupleId, date);
+    public List<ScheduleDto> getSchedulesByDate(Long userId, Long coupleId, LocalDate date, String scope) {
+        return scheduleMapper.getSchedulesByDate(userId, coupleId, date, scope);
     }
 
     public void deleteSchedule(Long scheduleId) {

@@ -59,8 +59,8 @@ public class CoupleController {
 
     @DeleteMapping("/delete")
     @Operation(summary = "커플 삭제")
-    public ResponseEntity<String> deleteCouple(@RequestParam Long CoupleId) {
-        coupleService.deleteCouple(CoupleId);
+    public ResponseEntity<String> deleteCouple(@RequestParam Long coupleId) {
+        coupleService.deleteCouple(coupleId);
         return ResponseEntity.ok("커플이 삭제 되었습니다.");
     }
 

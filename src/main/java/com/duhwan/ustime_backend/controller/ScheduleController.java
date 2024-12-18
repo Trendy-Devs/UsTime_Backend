@@ -21,18 +21,23 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    @Operation(summary = "전체 일정 조회")
+    @Operation(summary = "스코프 별 전체 일정 조회")
     @GetMapping("/all")
-    public ResponseEntity<List<ScheduleDto>> getAllSchedulesForCalendar() {
-        List<ScheduleDto> result = scheduleService.getAllSchedulesForCalendar();
+    public ResponseEntity<List<ScheduleDto>> getAllSchedulesForCalendar(@RequestParam Long userId,
+                                                                        @RequestParam(required = false) Long coupleId,
+                                                                        @RequestParam(required = false) String scope) {
+        List<ScheduleDto> result = scheduleService.getAllSchedulesForCalendar(userId,coupleId,scope);
         return ResponseEntity.ok(result);
     }
 
     @Operation(summary = "특정 날짜 일정 조회")
     @GetMapping("/{date}")
-    public ResponseEntity<List<ScheduleDto>> getSchedulesByDate(@RequestParam Long coupleId,@PathVariable("date") String date) {
+    public ResponseEntity<List<ScheduleDto>> getSchedulesByDate(@RequestParam Long userId,
+                                                                @RequestParam(required = false) Long coupleId,
+                                                                @RequestParam String scope,
+                                                                @PathVariable("date") String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        List<ScheduleDto> result = scheduleService.getSchedulesByDate(coupleId,localDate);
+        List<ScheduleDto> result = scheduleService.getSchedulesByDate(userId,coupleId,localDate,scope);
         return ResponseEntity.ok(result);
     }
 
