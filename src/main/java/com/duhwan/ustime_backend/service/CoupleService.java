@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,6 +68,7 @@ public class CoupleService {
     }
 
     // 커플 신청 거절
+    @Transactional
     public void declineCoupleRequest(Long requestId) {
         CoupleRequestDto request = coupleMapper.getRequestById(requestId);
         if (request == null || !"대기".equals(request.getStatus())) {
@@ -97,12 +99,24 @@ public class CoupleService {
         return existCouple != null;
     }
 
+    @Transactional
     public void deleteCouple(Long coupleId) {
-        // 1. 커플이 존재하는지 확인
         CoupleDto couple = coupleMapper.getCoupleById(coupleId);
         if (couple == null) {
             throw new IllegalArgumentException("커플을 찾을 수 없습니다.");
         }
         coupleMapper.deleteCouple(coupleId);
     }
+
+    // 기념일 수정
+    @Transactional
+    public void updateAnniversary(Long coupleId, LocalDate anniversary) {
+        coupleMapper.updateAnniversary(coupleId,anniversary);
+    }
+
+    // 커플 정보보기
+    public CoupleDto getCoupleInfo(Long coupleId) {
+        return coupleMapper.getCoupleById(coupleId);
+    }
+
 }

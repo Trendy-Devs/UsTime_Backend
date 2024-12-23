@@ -37,6 +37,16 @@ public class ScheduleService {
     @Transactional
     public void updateSchedule(ScheduleDto dto) {
         scheduleMapper.updateSchedule(dto);
+        String message = "일정이 수정되었습니다.";
+        Long scheduleId = dto.getScheduleId();
+        Long userId = dto.getCreatedBy();
+
+        notificationService.createNotification(
+                userId,
+                "일정 수정",
+                scheduleId,
+                message
+                );
     }
 
     // 캘린더에 표시될 스코프 별 모든 일정 가져오기
@@ -49,11 +59,7 @@ public class ScheduleService {
 
     }
 
-    // 특정 커플의 특정 날짜에 해당하는 일정 가져오기
-    public List<ScheduleDto> getSchedulesByDate(Long userId, Long coupleId, LocalDate date, String scope) {
-        return scheduleMapper.getSchedulesByDate(userId, coupleId, date, scope);
-    }
-
+    @Transactional
     public void deleteSchedule(Long scheduleId) {
         scheduleMapper.deleteSchedule(scheduleId);
     }

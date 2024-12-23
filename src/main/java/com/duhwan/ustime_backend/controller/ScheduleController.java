@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -27,17 +25,6 @@ public class ScheduleController {
                                                                         @RequestParam(required = false) Long coupleId,
                                                                         @RequestParam(required = false) String scope) {
         List<ScheduleDto> result = scheduleService.getAllSchedulesForCalendar(userId,coupleId,scope);
-        return ResponseEntity.ok(result);
-    }
-
-    @Operation(summary = "특정 날짜 일정 조회")
-    @GetMapping("/{date}")
-    public ResponseEntity<List<ScheduleDto>> getSchedulesByDate(@RequestParam Long userId,
-                                                                @RequestParam(required = false) Long coupleId,
-                                                                @RequestParam String scope,
-                                                                @PathVariable("date") String date) {
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        List<ScheduleDto> result = scheduleService.getSchedulesByDate(userId,coupleId,localDate,scope);
         return ResponseEntity.ok(result);
     }
 

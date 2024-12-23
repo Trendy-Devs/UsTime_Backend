@@ -6,6 +6,7 @@ import com.duhwan.ustime_backend.dto.CoupleRequestDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -33,5 +34,7 @@ public interface CoupleMapper {
     void deleteCouple(Long coupleId);
 
     CoupleDto getCoupleById(Long coupleId);
+
+    void updateAnniversary(Long coupleId, LocalDate anniversary);
 
 }

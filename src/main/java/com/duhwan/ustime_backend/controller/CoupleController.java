@@ -1,5 +1,6 @@
 package com.duhwan.ustime_backend.controller;
 
+import com.duhwan.ustime_backend.dto.CoupleDto;
 import com.duhwan.ustime_backend.dto.CoupleRequestDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import com.duhwan.ustime_backend.service.CoupleService;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -64,4 +66,18 @@ public class CoupleController {
         return ResponseEntity.ok("커플이 삭제 되었습니다.");
     }
 
+    @PostMapping("/update")
+    @Operation(summary = "기념일 수정")
+    public ResponseEntity<String> updateAnniversary(@RequestParam Long coupleId ,@RequestParam String date) {
+        LocalDate anniversary = LocalDate.parse(date);
+        coupleService.updateAnniversary(coupleId,anniversary);
+        return ResponseEntity.ok("커플 기념일이 수정되었습니다.");
+    }
+
+    @GetMapping("/getInfo")
+    @Operation(summary = "커플 정보보기")
+    public ResponseEntity<CoupleDto> getCoupleInfo(@RequestParam Long coupleId) {
+        CoupleDto info = coupleService.getCoupleInfo(coupleId);
+        return ResponseEntity.ok(info);
+    }
 }

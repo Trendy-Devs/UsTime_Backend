@@ -63,6 +63,7 @@
         DELETE FROM Couple WHERE coupleId = #{coupleId}
     </delete>
 
+    <!-- 커플요청 정보 -->
     <select id="getRequestInfo" resultType="CoupleResponseDto">
         SELECT
             cr.requestId,
@@ -79,5 +80,14 @@
         WHERE
             cr.requestId = #{requestId}
     </select>
+
+    <!-- 기념일 수정 -->
+    <update id="updateAnniversary" >
+        UPDATE Couple
+        SET anniversary= #{anniversary}
+        WHERE coupleId = #{coupleId}
+    </update>
+
+
 
 </mapper>
