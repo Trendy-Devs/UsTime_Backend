@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.List;
 public class CoupleController {
 
     private final CoupleService coupleService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     // 커플 신청
     @PostMapping("/request")

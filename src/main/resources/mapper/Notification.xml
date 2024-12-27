@@ -20,6 +20,7 @@
     <select id="getUserId" resultType="Long">
         SELECT userId FROM Notification WHERE notificationId = #{notificationId}
     </select>
+
     <!-- 알림 상태 업데이트 (읽음 처리) -->
     <update id="updateNotificationStatus" parameterType="map">
         UPDATE Notification
@@ -30,6 +31,11 @@
     <!-- 알림 삭제 -->
     <delete id="deleteNotification" parameterType="long">
         DELETE FROM Notification WHERE notificationId = #{notificationId};
+    </delete>
+
+    <!-- 일정 삭제후 알림 삭제   -->
+    <delete id="deleteScheduleNoti">
+        DELETE FROM Notification WHERE typeId = #{scheduleId} AND type = #{type};
     </delete>
 
 

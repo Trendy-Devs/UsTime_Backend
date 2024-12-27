@@ -3,11 +3,9 @@ package com.duhwan.ustime_backend.service;
 import com.duhwan.ustime_backend.dao.CoupleMapper;
 import com.duhwan.ustime_backend.dao.NotificationMapper;
 import com.duhwan.ustime_backend.dao.ScheduleMapper;
-import com.duhwan.ustime_backend.dto.CoupleRequestDto;
-import com.duhwan.ustime_backend.dto.CoupleResponseDto;
-import com.duhwan.ustime_backend.dto.NotificationDto;
-import com.duhwan.ustime_backend.dto.ScheduleDto;
+import com.duhwan.ustime_backend.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,9 +19,10 @@ public class NotificationService {
     private final NotificationMapper notificationMapper;
     private final CoupleMapper coupleMapper;
     private final ScheduleMapper scheduleMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     // 알림 신청
-    public void createNotification(Long userId, String type, Long typeId,String message) {
+    public void createNotification(Long userId, String type, Long typeId,String message, Long coupleId) {
         // NotificationDto 객체 생성
         NotificationDto notification = new NotificationDto();
         notification.setUserId(userId);               // 알림을 받을 사용자 ID
@@ -35,6 +34,19 @@ public class NotificationService {
 
         // 알림 생성: 알림 유형에 관계없이 동일하게 처리
         notificationMapper.createNotification(notification);
+
+        // 실시간 알림 전송: coupleId가 있으면 포함하여 전송
+        if (coupleId != null) {
+            messagingTemplate.convertAndSend(
+                    "/ustime/notifications/" + userId,
+                    new NotiByCoupleIdDto(notification, coupleId)
+            );
+        } else {
+            messagingTemplate.convertAndSend(
+                    "/ustime/notifications/" + userId,
+                    notification
+            );
+        }
     }
 
     // 알림 조회
@@ -77,6 +89,11 @@ public class NotificationService {
     // 알림 삭제
     public void deleteNotification(Long notificationId) {
         notificationMapper.deleteNotification(notificationId);
+    }
+
+    public void deleteScheduleNoti(Long scheduleId) {
+        String type = "일정 생성";
+        notificationMapper.deleteScheduleNoti(scheduleId,type);
     }
 
     public Long getUserId(Long notificationId) {

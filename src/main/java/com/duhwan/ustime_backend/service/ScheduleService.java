@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -30,7 +29,8 @@ public class ScheduleService {
                 userId,
                 "일정 생성",  // 알림 유형
                 scheduleId,
-                message      // 알림 메시지
+                message,      // 알림 메시지
+                null
         );
     }
 
@@ -45,12 +45,13 @@ public class ScheduleService {
                 userId,
                 "일정 수정",
                 scheduleId,
-                message
+                message,
+                null
                 );
     }
 
     // 캘린더에 표시될 스코프 별 모든 일정 가져오기
-    public List<ScheduleDto> getAllSchedulesForCalendar(Long userId, Long coupleId, String scope) {
+    public List<ScheduleDto>  getAllSchedulesForCalendar(Long userId, Long coupleId, String scope) {
         if(coupleId == null) {
             return scheduleMapper.getPersonalSchedules(userId);
         } else {
@@ -62,6 +63,7 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(Long scheduleId) {
         scheduleMapper.deleteSchedule(scheduleId);
+        notificationService.deleteScheduleNoti(scheduleId);
     }
 
 

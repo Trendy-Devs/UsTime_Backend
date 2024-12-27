@@ -6,6 +6,7 @@ import com.duhwan.ustime_backend.dto.CoupleDto;
 import com.duhwan.ustime_backend.dto.CoupleRequestDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class CoupleService {
     private final CoupleMapper coupleMapper;
     private final NotificationService notificationService;
     private final UserMapper userMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     // 커플 신청
     public void createCoupleRequest(CoupleRequestDto dto) {
@@ -34,7 +36,7 @@ public class CoupleService {
         Long requestId = dto.getRequestId();
 
         // 알림 생성: 상대방에게 알림
-        notificationService.createNotification(dto.getToUserId(), "커플 신청", requestId, "새로운 커플 요청이 왔습니다.");
+        notificationService.createNotification(dto.getToUserId(), "커플 신청", requestId, "새로운 커플 요청이 왔습니다.",null);
     }
 
     // 커플 신청 승인
@@ -63,8 +65,9 @@ public class CoupleService {
         ));
 
         // 알림 생성: 신청자와 승인자에게 알림
-        notificationService.createNotification(request.getFromUserId(), "커플 승인", requestId,"커플 요청이 승인되었습니다.");
-        notificationService.createNotification(request.getToUserId(), "커플 승인", requestId,"커플 요청이 승인되었습니다.");
+        notificationService.createNotification(request.getFromUserId(), "커플 승인", requestId,"커플 요청이 승인되었습니다.",coupleId);
+        notificationService.createNotification(request.getToUserId(), "커플 승인", requestId,"커플 요청이 승인되었습니다.",coupleId);
+
     }
 
     // 커플 신청 거절
@@ -78,8 +81,9 @@ public class CoupleService {
         coupleMapper.declineCoupleRequest(requestId);
 
         // 알림 생성: 거절자와 신청자에게 알림
-        notificationService.createNotification(request.getFromUserId(), "커플 거절", requestId,"커플 요청이 거절되었습니다.");
-        notificationService.createNotification(request.getToUserId(), "커플 거절", requestId, "커플 요청이 거절되었습니다.");
+        notificationService.createNotification(request.getFromUserId(), "커플 거절", requestId,"커플 요청이 거절되었습니다.", null);
+        notificationService.createNotification(request.getToUserId(), "커플 거절", requestId, "커플 요청이 거절되었습니다.", null);
+
     }
 
     // 유저 찾기
