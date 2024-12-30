@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/check")
+@RestController
+@RequestMapping("check")
 @RequiredArgsConstructor
 @Tag(name="체크리스트 API", description = "체크리스트 관련 기능을 제공하는 API")
 public class CheckListController {

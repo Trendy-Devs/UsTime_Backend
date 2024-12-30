@@ -6,8 +6,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import java.util.List;
-
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -15,8 +13,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 메시지 브로커 설정
-        config.enableSimpleBroker("/ustime/notifications/{userId}"); // 클라이언트가 구독할 prefix
-        config.setApplicationDestinationPrefixes("/app"); // 클라이언트가 서버로 보낼 때 사용하는 prefix
+        config.enableSimpleBroker("/ustime/notifications"); // 클라이언트가 구독할 prefix
+        config.setApplicationDestinationPrefixes("/app"); // 서버로 보낼 prefix
     }
 
     @Override
