@@ -36,37 +36,37 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS(); // SockJS 지원
     }
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        // 인터셉터 등록
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                // 메시지에서 Authorization 헤더를 추출하여 JWT 토큰을 검증
-                String token = (String) message.getHeaders().get("Authorization");
-
-                if (token != null && token.startsWith("Bearer ")) {
-                    token = token.substring(7).trim(); // "Bearer " 부분 제거
-
-                    // JWT 토큰 검증
-                    if (!jwtUtil.validateToken(token)) {
-                        try {
-                            throw new AuthenticationException("인증되지 않은 토큰입니다.(웹소켓)") {};  // 예외 처리
-                        } catch (AuthenticationException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                } else {
-                    try {
-                        throw new AuthenticationException("헤더가 비었습니다 (웹소켓)") {}; // 예외 처리
-                    } catch (AuthenticationException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-                return message; // 메시지 반환
-            }
-        });
-    }
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        // 인터셉터 등록
+//        registration.interceptors(new ChannelInterceptor() {
+//            @Override
+//            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+//                // 메시지에서 Authorization 헤더를 추출하여 JWT 토큰을 검증
+//                String token = (String) message.getHeaders().get("Authorization");
+//
+//                if (token != null && token.startsWith("Bearer ")) {
+//                    token = token.substring(7).trim(); // "Bearer " 부분 제거
+//
+//                    // JWT 토큰 검증
+//                    if (!jwtUtil.validateToken(token)) {
+//                        try {
+//                            throw new AuthenticationException("인증되지 않은 토큰입니다.(웹소켓)") {};  // 예외 처리
+//                        } catch (AuthenticationException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                } else {
+//                    try {
+//                        throw new AuthenticationException("헤더가 비었습니다 (웹소켓)") {}; // 예외 처리
+//                    } catch (AuthenticationException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//
+//                return message; // 메시지 반환
+//            }
+//        });
+//    }
 
 }
