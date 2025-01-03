@@ -20,4 +20,5 @@ public class NotificationDto {
     private String message;       // 알림 내용
     private String status;        // 알림 상태
     private LocalDateTime createdAt; // 생성 일시
+    private Long coupleId;        // 커플 ID
 }

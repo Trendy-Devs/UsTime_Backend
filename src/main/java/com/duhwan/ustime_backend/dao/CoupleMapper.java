@@ -37,4 +37,6 @@ public interface CoupleMapper {
 
     void updateAnniversary(Long coupleId, LocalDate anniversary);
 
+    Long getPartnerId(Long userId);
+
 }

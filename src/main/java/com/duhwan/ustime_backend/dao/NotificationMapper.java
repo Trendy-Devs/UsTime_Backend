@@ -21,7 +21,7 @@ public interface NotificationMapper {
     void deleteNotification(Long notificationId);
 
     // 일정 삭제 후 알림 삭제
-    void deleteScheduleNoti(Long scheduleId, String type);
+    void deleteScheduleNoti(Long scheduleId);
 
     Long getUserId(Long notificationId);
 }

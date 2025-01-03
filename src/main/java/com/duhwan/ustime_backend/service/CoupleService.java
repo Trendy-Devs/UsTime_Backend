@@ -103,6 +103,7 @@ public class CoupleService {
         return existCouple != null;
     }
 
+    // 커플 해지
     @Transactional
     public void deleteCouple(Long coupleId) {
         CoupleDto couple = coupleMapper.getCoupleById(coupleId);

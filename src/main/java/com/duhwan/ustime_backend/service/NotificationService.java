@@ -31,6 +31,8 @@ public class NotificationService {
         notification.setMessage(message);              // 알림 메시지
         notification.setStatus("읽지 않음");          // 기본 상태는 '읽지 않음'
         notification.setCreatedAt(LocalDateTime.now()); // 생성 일시
+        notification.setCoupleId(coupleId);         // 커플 아이디
+
 
         // 알림 생성: 알림 유형에 관계없이 동일하게 처리
         notificationMapper.createNotification(notification);
@@ -61,6 +63,7 @@ public class NotificationService {
                         .message(notification.getMessage())
                         .status(notification.getStatus())
                         .createdAt(notification.getCreatedAt())
+                        .coupleId(notification.getCoupleId())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -79,8 +82,6 @@ public class NotificationService {
         }
     }
 
-
-
     // 알림 읽음 처리
     public void markAsRead(Long notificationId) {
         notificationMapper.updateNotificationStatus(notificationId, "읽음");
@@ -92,8 +93,7 @@ public class NotificationService {
     }
 
     public void deleteScheduleNoti(Long scheduleId) {
-        String type = "일정 생성";
-        notificationMapper.deleteScheduleNoti(scheduleId,type);
+        notificationMapper.deleteScheduleNoti(scheduleId);
     }
 
     public Long getUserId(Long notificationId) {
