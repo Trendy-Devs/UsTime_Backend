@@ -88,6 +88,14 @@
         WHERE coupleId = #{coupleId}
     </update>
 
-
+    <select id="getPartnerId" parameterType="long" resultType="long">
+        SELECT
+            CASE
+                WHEN user1Id = #{userId} THEN user2Id
+                ELSE user1Id
+                END AS partnerId
+        FROM Couple
+        WHERE user1Id = #{userId} OR user2Id = #{userId}
+    </select>
 
 </mapper>
