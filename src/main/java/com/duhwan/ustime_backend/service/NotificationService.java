@@ -33,22 +33,14 @@ public class NotificationService {
         notification.setCreatedAt(LocalDateTime.now()); // 생성 일시
         notification.setCoupleId(coupleId);         // 커플 아이디
 
-
         // 알림 생성: 알림 유형에 관계없이 동일하게 처리
         notificationMapper.createNotification(notification);
 
         // 실시간 알림 전송: coupleId가 있으면 포함하여 전송
-        if (coupleId != null) {
-            messagingTemplate.convertAndSend(
-                    "/ustime/notifications/" + userId,
-                    new NotiByCoupleIdDto(notification, coupleId)
-            );
-        } else {
             messagingTemplate.convertAndSend(
                     "/ustime/notifications/" + userId,
                     notification
             );
-        }
     }
 
     // 알림 조회
@@ -96,7 +88,4 @@ public class NotificationService {
         notificationMapper.deleteScheduleNoti(scheduleId);
     }
 
-    public Long getUserId(Long notificationId) {
-       return notificationMapper.getUserId(notificationId);
-    }
 }
