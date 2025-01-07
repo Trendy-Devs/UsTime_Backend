@@ -22,7 +22,6 @@ public class CoupleService {
     private final CoupleMapper coupleMapper;
     private final NotificationService notificationService;
     private final UserMapper userMapper;
-    private final SimpMessagingTemplate messagingTemplate;
 
     // 커플 신청
     public void createCoupleRequest(CoupleRequestDto dto) {

@@ -1,5 +1,6 @@
 package com.duhwan.ustime_backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class CheckListDto {
     private Long coupleId;
     private String category;
     private String title;
+    @JsonProperty("isChecked")
     private boolean isChecked;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
