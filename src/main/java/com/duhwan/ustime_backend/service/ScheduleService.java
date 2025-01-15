@@ -3,6 +3,7 @@ package com.duhwan.ustime_backend.service;
 import com.duhwan.ustime_backend.dao.CoupleMapper;
 import com.duhwan.ustime_backend.dao.ScheduleMapper;
 import com.duhwan.ustime_backend.dto.ScheduleDto;
+import com.duhwan.ustime_backend.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,26 +20,33 @@ public class ScheduleService {
     private final ScheduleMapper scheduleMapper;
     private final CoupleMapper coupleMapper;
     private final NotificationService notificationService;
+    private final UserService userService;
 
     // 일정 생성
     @Transactional
     public void createSchedule(ScheduleDto dto) {
         // 일정 생성
         scheduleMapper.insertSchedule(dto);
-        // 알림 생성: 일정 생성 알림
-        String message = "새로운 일정이 생성되었습니다.";
+
+        String createUserName = userService.getUserInfo(dto.getCreatedBy()).getName();
+        String message = createUserName + "님이 새로운 일정이 생성하였습니다.";
         Long scheduleId = dto.getScheduleId();
         Long userId = dto.getCreatedBy();  // 일정 생성자의 ID
         Long partnerId = coupleMapper.getPartnerId(userId);
         Long coupleId = dto.getCoupleId();
         String summary = dto.getTitle();
 
+        // 알림 생성: 일정 생성 알림
         notificationService.createNotification(userId,"일정 생성", scheduleId, message, summary, coupleId);
         notificationService.createNotification(partnerId,"일정 생성", scheduleId, message, summary, coupleId);
     }
 
     @Transactional
     public void updateSchedule(ScheduleDto dto) {
+        // 인증된 사용자 이름 가져오기
+        String currentUserName = SecurityUtils.getCurrentUserName();
+        
+        // 이전 스케줄
         ScheduleDto prev = scheduleMapper.getScheduleById(dto.getScheduleId());
 
         scheduleMapper.updateSchedule(dto);
@@ -77,7 +85,7 @@ public class ScheduleService {
                 ? "수정된 항목: " + changeSummary.toString()
                 : "변경 사항 없음";
 
-        String message = "일정이 수정되었습니다.";
+        String message = currentUserName + "님이 일정이 수정했습니다.";
         Long scheduleId = dto.getScheduleId();
         Long userId = dto.getCreatedBy();
         Long partnerId = coupleMapper.getPartnerId(userId);

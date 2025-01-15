@@ -35,8 +35,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/couple/request/**", "/couple/approve/**", "/couple/decline/**","/couple/search/**","/couple/update/**","/couple/getInfo/**").authenticated()  // 커플 인증 필요
                         .requestMatchers("/user/userinfo/**", "/user/update/**", "/user/changePassword/**").authenticated()  // 유저 인증 필요
-                        .requestMatchers("/calendar/all/**", "/calendar/create/**", "/calendar/update/**", "/calendar/delete/**").authenticated()  // 일정 인증 필요
+                        .requestMatchers("/calendar/all/**", "/calendar/week/**","/calendar/create/**", "/calendar/update/**", "/calendar/delete/**").authenticated()  // 일정 인증 필요
                         .requestMatchers("/notifications/getNotify/**", "/notifications/getDetail/**","/notifications/markAsRead/**", "/notifications/delete/**").authenticated()  // 알림 인증 필요
+                        .requestMatchers("/check/update/**", "/check/add/**","/check/**", "/check/delete/**").authenticated()  // 알림 인증 필요
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // OPTIONS 요청 허용
                         .anyRequest().permitAll()  // 그 외 모든 요청 인증
                 )
