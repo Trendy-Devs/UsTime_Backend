@@ -7,7 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -28,23 +31,60 @@ public class ScheduleService {
         Long userId = dto.getCreatedBy();  // 일정 생성자의 ID
         Long partnerId = coupleMapper.getPartnerId(userId);
         Long coupleId = dto.getCoupleId();
+        String summary = dto.getTitle();
 
-
-        notificationService.createNotification(userId,"일정 생성", scheduleId, message, coupleId);
-        notificationService.createNotification(partnerId,"일정 생성", scheduleId, message, coupleId);
+        notificationService.createNotification(userId,"일정 생성", scheduleId, message, summary, coupleId);
+        notificationService.createNotification(partnerId,"일정 생성", scheduleId, message, summary, coupleId);
     }
 
     @Transactional
     public void updateSchedule(ScheduleDto dto) {
+        ScheduleDto prev = scheduleMapper.getScheduleById(dto.getScheduleId());
+
         scheduleMapper.updateSchedule(dto);
+
+        // 변경된 필드 확인
+        StringBuilder changeSummary = new StringBuilder();
+        boolean firstChange = true;
+
+        if (!Objects.equals(prev.getTitle(), dto.getTitle())) {
+            if (!firstChange) changeSummary.append(",");
+            changeSummary.append("제목");
+            firstChange = false;
+        }
+        if (!Objects.equals(prev.getDescription(), dto.getDescription())) {
+            if (!firstChange) changeSummary.append(",");
+            changeSummary.append("설명");
+            firstChange = false;
+        }
+        if (!Objects.equals(prev.getStartDate(), dto.getStartDate()) ||
+                !Objects.equals(prev.getEndDate(), dto.getEndDate())) {
+            if (!firstChange) changeSummary.append(",");
+            changeSummary.append("날짜");
+            firstChange = false;
+        }
+        if (!Objects.equals(prev.getLabel(), dto.getLabel())) {
+            if (!firstChange) changeSummary.append(",");
+            changeSummary.append("라벨색");
+            firstChange = false;
+        }
+        if (!Objects.equals(prev.getLocation(), dto.getLocation())) {
+            if (!firstChange) changeSummary.append(",");
+            changeSummary.append("장소");
+        }
+
+        String summary = changeSummary.length() > 0
+                ? "수정된 항목: " + changeSummary.toString()
+                : "변경 사항 없음";
+
         String message = "일정이 수정되었습니다.";
         Long scheduleId = dto.getScheduleId();
         Long userId = dto.getCreatedBy();
         Long partnerId = coupleMapper.getPartnerId(userId);
         Long coupleId = dto.getCoupleId();
 
-        notificationService.createNotification(userId,"일정 수정", scheduleId, message, coupleId);
-        notificationService.createNotification(partnerId,"일정 수정", scheduleId, message, coupleId);
+        notificationService.createNotification(userId,"일정 수정", scheduleId, message, summary, coupleId);
+        notificationService.createNotification(partnerId,"일정 수정", scheduleId, message, summary, coupleId);
     }
 
     // 캘린더에 표시될 스코프 별 모든 일정 가져오기
@@ -54,7 +94,15 @@ public class ScheduleService {
         } else {
             return scheduleMapper.getSchedulesByScope(userId,coupleId,scope);
         }
+    }
 
+    // 이번주 일정 가져오기
+    public List<ScheduleDto> getWeekSchedule(Long userId, Long coupleId, LocalDate date) {
+        // 주간 범위 계산
+        LocalDate startOfWeek = date.with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = date.with(DayOfWeek.SUNDAY);
+
+        return scheduleMapper.getWeekSchedule(userId,coupleId,startOfWeek,endOfWeek);
     }
 
     // 일정 삭제

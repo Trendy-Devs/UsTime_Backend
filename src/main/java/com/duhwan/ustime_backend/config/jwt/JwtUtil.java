@@ -68,10 +68,6 @@ public class JwtUtil {
         }
     }
 
-    //토큰에서 userId 추출
-    public Long getUserId(String token) {
-        return parseclaims(token).get("userId", Long.class);
-    }
     //이후 필요한게 있을시 추가 작성
     public String getUserEmail(String token) {
         return parseclaims(token).get("email", String.class);

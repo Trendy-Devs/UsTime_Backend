@@ -23,7 +23,6 @@ public class CoupleController {
     private final CoupleService coupleService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    // 커플 신청
     @PostMapping("/request")
     @Operation(summary = "커플 신청")
     public ResponseEntity<String> createCoupleRequest(@RequestParam Long fromUserId, @RequestParam Long toUserId) {
@@ -37,7 +36,6 @@ public class CoupleController {
         return ResponseEntity.ok("커플 신청이 성공적으로 추가되었습니다.");
     }
 
-    // 커플 신청 승인
     @PutMapping("/approve")
     @Operation(summary = "커플 승인")
     public ResponseEntity<String> approveCoupleRequest(@RequestParam Long requestId) {
@@ -45,7 +43,6 @@ public class CoupleController {
         return ResponseEntity.ok("커플 신청이 승인되었습니다.");
     }
 
-    // 커플 신청 거절
     @PutMapping("/decline")
     @Operation(summary = "커플 거절")
     public ResponseEntity<String> declineCoupleRequest(@RequestParam Long requestId) {
@@ -53,7 +50,6 @@ public class CoupleController {
         return ResponseEntity.ok("커플 신청이 거절되었습니다.");
     }
 
-    // 유저 검색
     @GetMapping("/search")
     @Operation(summary = "유저 검색")
     public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String name) {

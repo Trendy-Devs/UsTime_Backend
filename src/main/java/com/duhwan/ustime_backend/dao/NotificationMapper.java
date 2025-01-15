@@ -23,5 +23,6 @@ public interface NotificationMapper {
     // 일정 삭제 후 알림 삭제
     void deleteScheduleNoti(Long scheduleId);
 
-    Long getUserId(Long notificationId);
+    // 커플 매칭 후 커플 신청알림 삭제
+    void deleteCoupleRequestNoti(Long reqeustId);
 }

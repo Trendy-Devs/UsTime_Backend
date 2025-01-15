@@ -17,7 +17,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // email로 사용자 조회
         UserDto userDto = userMapper.findByEmail(email);
         if (userDto == null) {
             throw new UsernameNotFoundException("이메일에 해당하는 유저가 없습니다.: " + email);

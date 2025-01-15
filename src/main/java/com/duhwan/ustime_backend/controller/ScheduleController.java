@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,6 +28,16 @@ public class ScheduleController {
         List<ScheduleDto> result = scheduleService.getAllSchedulesForCalendar(userId,coupleId,scope);
         return ResponseEntity.ok(result);
     }
+
+    @Operation(summary = "일주일 치 일정 조회")
+    @GetMapping("/week")
+    public ResponseEntity<List<ScheduleDto>> getWeekSchedule(@RequestParam Long userId,
+                                                             @RequestParam(required = false) Long coupleId,
+                                                             @RequestParam LocalDate date) {
+        List<ScheduleDto> week = scheduleService.getWeekSchedule(userId,coupleId,date);
+        return ResponseEntity.ok(week);
+    }
+
 
     @Operation(summary = "일정 생성")
     @PostMapping("/create")

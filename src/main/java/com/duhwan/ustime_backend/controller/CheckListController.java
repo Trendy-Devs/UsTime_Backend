@@ -18,7 +18,6 @@ public class CheckListController {
 
     private final CheckListService checkListService;
 
-    // 체크리스트 항목 추가
     @PostMapping("/add")
     @Operation(summary = "체크리스트 항목 추가")
     public ResponseEntity<String> addChecklistItem(@RequestParam Long userId,
@@ -29,7 +28,6 @@ public class CheckListController {
         return ResponseEntity.ok("체크리스트 항목이 추가되었습니다.");
     }
 
-    // 체크리스트 보기 (커플 ID 기준으로)
     @GetMapping("/{coupleId}")
     @Operation(summary = "체크리스트 보기")
     public ResponseEntity<List<CheckListDto>> getChecklistByCouple(@PathVariable Long coupleId) {
@@ -37,7 +35,6 @@ public class CheckListController {
         return ResponseEntity.ok(checkList);
     }
 
-    // 체크리스트 항목 상태 업데이트
     @PutMapping("/update/{checklistId}")
     @Operation(summary = "체크 업데이트")
     public ResponseEntity<String> updateChecklistItemStatus(@PathVariable Long checklistId,
@@ -46,7 +43,6 @@ public class CheckListController {
         return ResponseEntity.ok("체크리스트 상태가 업데이트되었습니다.");
     }
 
-    // 체크리스트 항목 삭제
     @DeleteMapping("/delete/{checklistId}")
     @Operation(summary = "체크리스트 삭제")
     public ResponseEntity<String> deleteChecklistItem(@PathVariable Long checklistId) {

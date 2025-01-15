@@ -25,7 +25,7 @@ public class CheckListService {
         return checkListMapper.getChecklistByCouple(coupleId);
     }
 
-    // 체크 업데이트
+    // 체크상태 업데이트
     @Transactional
     public void updateChecklistItemStatus(Long checklistId, boolean isChecked) {
         checkListMapper.updateChecklistItemStatus(checklistId, isChecked);

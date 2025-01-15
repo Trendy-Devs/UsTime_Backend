@@ -6,8 +6,8 @@
 
     <!-- 알림 생성 (커플 신청, 승인, 거절) -->
     <insert id="createNotification" parameterType="NotificationDto">
-        INSERT INTO Notification (userId, type, typeId, message, status, createdAt, coupleId)
-        VALUES (#{userId}, #{type}, #{typeId}, #{message}, #{status}, #{createdAt}, #{coupleId});
+        INSERT INTO Notification (userId, type, typeId, message, summary, status, createdAt, coupleId)
+        VALUES (#{userId}, #{type}, #{typeId}, #{message}, #{summary}, #{status}, #{createdAt}, #{coupleId});
     </insert>
 
     <!-- 알림 조회 -->
@@ -24,7 +24,8 @@
     <!-- 알림 상태 업데이트 (읽음 처리) -->
     <update id="updateNotificationStatus" parameterType="map">
         UPDATE Notification
-        SET status = #{status}
+        SET status = #{status},
+            readAt = CURRENT_TIMESTAMP
         WHERE notificationId = #{notificationId};
     </update>
 
@@ -36,6 +37,11 @@
     <!-- 일정 삭제후 알림 삭제   -->
     <delete id="deleteScheduleNoti">
         DELETE FROM Notification WHERE typeId = #{scheduleId} AND type LIKE '일정%';
+    </delete>
+
+    <!-- 커플 매칭 후 커플요청 알림 삭제   -->
+    <delete id="deleteCoupleRequestNoti">
+        DELETE FROM Notification WHERE typeId = #{requestId} AND type = '커플 신청';
     </delete>
 
 </mapper>

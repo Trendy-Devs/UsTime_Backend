@@ -22,13 +22,14 @@ public class NotificationService {
     private final SimpMessagingTemplate messagingTemplate;
 
     // 알림 신청
-    public void createNotification(Long userId, String type, Long typeId,String message, Long coupleId) {
+    public void createNotification(Long userId, String type, Long typeId,String message, String summary, Long coupleId) {
         // NotificationDto 객체 생성
         NotificationDto notification = new NotificationDto();
         notification.setUserId(userId);               // 알림을 받을 사용자 ID
         notification.setType(type);                    // 알림 유형 (예: 커플 신청, 일정 생성 등)
         notification.setTypeId(typeId);                // 타입 ID (예: requestId, scheduleId 등)
         notification.setMessage(message);              // 알림 메시지
+        notification.setSummary(summary);              // 알림 요약
         notification.setStatus("읽지 않음");          // 기본 상태는 '읽지 않음'
         notification.setCreatedAt(LocalDateTime.now()); // 생성 일시
         notification.setCoupleId(coupleId);         // 커플 아이디
@@ -53,6 +54,7 @@ public class NotificationService {
                         .type(notification.getType())
                         .typeId(notification.getTypeId())
                         .message(notification.getMessage())
+                        .summary(notification.getSummary())
                         .status(notification.getStatus())
                         .createdAt(notification.getCreatedAt())
                         .coupleId(notification.getCoupleId())
@@ -84,6 +86,7 @@ public class NotificationService {
         notificationMapper.deleteNotification(notificationId);
     }
 
+    // 일정 삭제 시 관련 알림 삭제
     public void deleteScheduleNoti(Long scheduleId) {
         notificationMapper.deleteScheduleNoti(scheduleId);
     }

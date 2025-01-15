@@ -23,7 +23,6 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    // 알림 조회 API
     @GetMapping("/getNotify")
     @Operation(summary = "알림 조회")
     public ResponseEntity<List<NotificationDto>> getNotifications(@RequestParam Long userId) {
@@ -31,7 +30,6 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
-    // 특정 알림 조회
     @GetMapping("/getDetail")
     @Operation(summary = "요청받은 커플/일정에 따라 DTO 반환")
     @ApiResponse(responseCode = "200", description = "Success",
@@ -51,7 +49,6 @@ public class NotificationController {
         }
     }
 
-    // 알림 읽음 처리
     @PutMapping("/markAsRead")
     @Operation(summary = "안읽음 처리")
     public ResponseEntity<String> markAsRead(@RequestParam Long notificationId) {
@@ -59,7 +56,6 @@ public class NotificationController {
         return ResponseEntity.ok("알림이 읽음으로 처리되었습니다.");
     }
 
-    // 알림 삭제
     @DeleteMapping("/delete")
     @Operation(summary = "알림 삭제")
     public ResponseEntity<String> deleteNotification(@RequestParam Long notificationId) {

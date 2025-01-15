@@ -88,6 +88,7 @@
         WHERE coupleId = #{coupleId}
     </update>
 
+    <!-- 파트너 ID 가져오기 -->
     <select id="getPartnerId" parameterType="long" resultType="long">
         SELECT
             CASE

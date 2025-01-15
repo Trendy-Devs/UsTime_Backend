@@ -33,6 +33,13 @@
         </choose>
     </select>
 
+    <select id="getWeekSchedule" resultType="ScheduleDto">
+        SELECT *
+        FROM Schedule
+        WHERE (startDate BETWEEN #{startOfWeek} AND #{endOfWeek} AND createdBy = #{userId})
+          OR (startDate BETWEEN #{startOfWeek} AND #{endOfWeek} AND coupleId = #{coupleId} AND scope = '공유')
+    </select>
+
     <!-- 일정 추가 -->
     <insert id="insertSchedule" useGeneratedKeys="true" keyProperty="scheduleId">
         INSERT INTO Schedule (coupleId, title, description, startDate, endDate, label, location, createdBy, scope)

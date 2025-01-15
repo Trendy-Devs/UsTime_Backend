@@ -1,6 +1,5 @@
 package com.duhwan.ustime_backend.config;
 
-import com.duhwan.ustime_backend.config.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -13,8 +12,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-    private final JwtUtil jwtUtil;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -31,6 +28,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS(); // SockJS 지원
     }
 
+    //이후 추가예정
 //    @Override
 //    public void configureClientInboundChannel(ChannelRegistration registration) {
 //        // 인터셉터 등록
