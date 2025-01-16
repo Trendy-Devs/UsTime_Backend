@@ -62,4 +62,12 @@ public class NotificationController {
         notificationService.deleteNotification(notificationId);
         return ResponseEntity.ok("알림이 삭제되었습니다.");
     }
+
+    @DeleteMapping("/old")
+    @Operation(summary = "3일/30일 알림 자동삭제(스케줄러 확인용)")
+    public ResponseEntity<String> deleteOldNoti() {
+        int result = notificationService.deleteOldNoti();
+        return ResponseEntity.ok(result + "개가 삭제되었습니다.");
+    }
+
 }

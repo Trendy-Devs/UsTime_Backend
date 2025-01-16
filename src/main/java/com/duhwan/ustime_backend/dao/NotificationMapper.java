@@ -3,6 +3,7 @@ package com.duhwan.ustime_backend.dao;
 import com.duhwan.ustime_backend.dto.NotificationDto;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -25,4 +26,7 @@ public interface NotificationMapper {
 
     // 커플 매칭 후 커플 신청알림 삭제
     void deleteCoupleRequestNoti(Long reqeustId);
+
+    // 읽은지 3일 혹은 30일 경과된 알림 자동삭제
+    int deleteOldNoti(LocalDateTime readAtLimit, LocalDateTime createAtLimit);
 }

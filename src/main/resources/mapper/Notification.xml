@@ -44,4 +44,11 @@
         DELETE FROM Notification WHERE typeId = #{requestId} AND type = '커플 신청';
     </delete>
 
+    <!-- 30일 지난 알림 자동삭제 &lt;는 <를 의미합니다. -->
+    <delete id="deleteOldNoti">
+        DELETE FROM Notification
+        WHERE (status = '읽음' AND readAt &lt; #{readAtLimit})
+        OR createdAt &lt; #{createAtLimit}
+    </delete>
+
 </mapper>

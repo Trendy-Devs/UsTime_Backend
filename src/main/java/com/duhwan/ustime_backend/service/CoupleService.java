@@ -37,7 +37,7 @@ public class CoupleService {
         String reqeustName = userMapper.selectUser(dto.getFromUserId()).getName();
 
         // 알림 생성: 상대방에게 알림
-        notificationService.createNotification(dto.getToUserId(), "커플 신청", requestId, "새로운 커플 요청이 왔습니다.","✨ " + reqeustName+ "님 으로부터 커플 요청이 왔습니다. ✨\\n수락하여 특별한 인연을 시작해보세요. ❤", null);
+        notificationService.createNotification(dto.getToUserId(), "커플 신청", requestId, "새로운 커플 요청이 왔습니다.","✨ " + reqeustName+ "님 으로부터 커플 요청이 왔습니다. ✨\n수락하여 특별한 인연을 시작해보세요. ❤", null);
     }
 
     // 커플 신청 승인
@@ -68,7 +68,7 @@ public class CoupleService {
         String requestName = userMapper.selectUser(request.getFromUserId()).getName();
         String responseName = userMapper.selectUser(request.getToUserId()).getName();
 
-        String summary = "✨ 두근두근, "+ requestName +"님과 "+ responseName +"님의 인연이 시작되었습니다! ✨\\n이제 USTime에서 서로의 일상을 공유하고 특별한 순간을 만들어보세요.❤";
+        String summary = "✨ 두근두근, "+ requestName +"님과 "+ responseName +"님의 인연이 시작되었습니다! ✨\n이제 USTime에서 서로의 일상을 공유하고 특별한 순간을 만들어보세요.❤";
 
 
         // 알림 생성: 신청자와 승인자에게 알림
@@ -90,7 +90,7 @@ public class CoupleService {
 
         coupleMapper.declineCoupleRequest(requestId);
 
-        String summary = "아쉽게도 요청이 거절되었습니다.\\n" +
+        String summary = "아쉽게도 요청이 거절되었습니다.\n" +
                 "더 멋진 인연이 기다리고 있을 거예요!";
         // 알림 생성: 거절자와 신청자에게 알림
         notificationService.createNotification(request.getToUserId(), "커플 거절", requestId, "커플 요청이 거절되었습니다.",summary ,null);

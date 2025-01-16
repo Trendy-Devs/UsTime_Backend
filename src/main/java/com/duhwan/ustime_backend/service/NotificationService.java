@@ -5,7 +5,10 @@ import com.duhwan.ustime_backend.dao.NotificationMapper;
 import com.duhwan.ustime_backend.dao.ScheduleMapper;
 import com.duhwan.ustime_backend.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,6 +23,7 @@ public class NotificationService {
     private final CoupleMapper coupleMapper;
     private final ScheduleMapper scheduleMapper;
     private final SimpMessagingTemplate messagingTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     // 알림 신청
     public void createNotification(Long userId, String type, Long typeId,String message, String summary, Long coupleId) {
@@ -90,5 +94,18 @@ public class NotificationService {
     public void deleteScheduleNoti(Long scheduleId) {
         notificationMapper.deleteScheduleNoti(scheduleId);
     }
+
+    // 읽은지 3일 혹은 30일이 경과된 알림 자동 삭제
+    @Scheduled(cron = "0 0 0 * * ?") //매일 자정에 실행
+    public int deleteOldNoti() {
+        LocalDateTime threeDaysAgo = LocalDateTime.now().minusDays(3);
+        LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
+        int deletedCount = notificationMapper.deleteOldNoti(threeDaysAgo, thirtyDaysAgo);
+
+        // 삭제된 알림 수를 로그로 출력
+        logger.info("자동 삭제된 알림 수: {}", deletedCount);
+        return deletedCount;
+    }
+
 
 }

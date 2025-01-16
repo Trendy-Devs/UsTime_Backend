@@ -29,12 +29,12 @@ public class ScheduleService {
         scheduleMapper.insertSchedule(dto);
 
         String createUserName = userService.getUserInfo(dto.getCreatedBy()).getName();
-        String message = createUserName + "님이 새로운 일정이 생성하였습니다.";
+        String message = createUserName + "님이 새로운 일정을 생성하였습니다.";
         Long scheduleId = dto.getScheduleId();
         Long userId = dto.getCreatedBy();  // 일정 생성자의 ID
         Long partnerId = coupleMapper.getPartnerId(userId);
         Long coupleId = dto.getCoupleId();
-        String summary = dto.getTitle();
+        String summary = "일정:" + dto.getTitle() + "\n일자:" + dto.getStartDate();
 
         // 알림 생성: 일정 생성 알림
         notificationService.createNotification(userId,"일정 생성", scheduleId, message, summary, coupleId);
@@ -62,7 +62,7 @@ public class ScheduleService {
         }
         if (!Objects.equals(prev.getDescription(), dto.getDescription())) {
             if (!firstChange) changeSummary.append(",");
-            changeSummary.append("설명");
+            changeSummary.append("내용");
             firstChange = false;
         }
         if (!Objects.equals(prev.getStartDate(), dto.getStartDate()) ||
@@ -85,7 +85,7 @@ public class ScheduleService {
                 ? "수정된 항목: " + changeSummary.toString()
                 : "변경 사항 없음";
 
-        String message = currentUserName + "님이 일정이 수정했습니다.";
+        String message = currentUserName + "님이 일정을 수정했습니다.";
         Long scheduleId = dto.getScheduleId();
         Long userId = dto.getCreatedBy();
         Long partnerId = coupleMapper.getPartnerId(userId);
