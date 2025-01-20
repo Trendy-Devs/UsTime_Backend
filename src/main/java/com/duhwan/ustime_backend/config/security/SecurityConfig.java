@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/couple/request/**", "/couple/approve/**", "/couple/decline/**","/couple/search/**","/couple/update/**","/couple/getInfo/**").authenticated()  // 커플 인증 필요
-                        .requestMatchers("/user/userinfo/**", "/user/update/**", "/user/changePassword/**").authenticated()  // 유저 인증 필요
+                        .requestMatchers("/user/userinfo/**", "/user/update/**", "/user/changePassword/**", "user/profile/**").authenticated()  // 유저 인증 필요
                         .requestMatchers("/calendar/all/**", "/calendar/week/**","/calendar/create/**", "/calendar/update/**", "/calendar/delete/**").authenticated()  // 일정 인증 필요
                         .requestMatchers("/notifications/getNotify/**", "/notifications/getDetail/**","/notifications/markAsRead/**", "/notifications/delete/**").authenticated()  // 알림 인증 필요
                         .requestMatchers("/check/update/**", "/check/add/**","/check/**", "/check/delete/**").authenticated()  // 알림 인증 필요
