@@ -31,18 +31,20 @@ public class S3Service {
     public String uploadFile(MultipartFile file) throws IOException{
 
         String fileName = file.getOriginalFilename();
+        String fileKey = "userImage/" + fileName;
+
         // S3로 파일 업로드
         s3Client.putObject(PutObjectRequest.builder()
                         .bucket(bucketName)
-                        .key(fileName)
+                        .key(fileKey)
                         .build(),
                 RequestBody.fromBytes(file.getBytes()));
-        return getFileUrl(fileName);
+        return getFileUrl(fileKey);
     }
 
     // 파일 다운로드 메서드 (CloudFront에서 직접 url을 받음)
-    public String getFileUrl(String fileName) {
-        return "https://" + cloudFrontDomainName + "/" + fileName;
+    public String getFileUrl(String fileKey) {
+        return cloudFrontDomainName + "/" + fileKey;
     }
 
     // 파일 다운로드 메서드(로컬에서 직접 받을 떄) -> 현재 사용하지 않음
