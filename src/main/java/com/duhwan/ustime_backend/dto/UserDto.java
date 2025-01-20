@@ -36,19 +36,6 @@ public class UserDto {
 
     private Long coupleId;              //커플 고유 ID
     private LocalDateTime createdAt;    //생성일
-
-    public static UserDto create(String email, String password, String name, Long coupleId,
-                                 LocalDate birthdate, String gender, String phone) {
-        return UserDto.builder()
-                .email(email)
-                .password(password)
-                .name(name)
-                .coupleId(coupleId)
-                .birthdate(birthdate)
-                .gender(gender)
-                .phone(phone)
-                .createdAt(LocalDateTime.now()) // 현재 시간으로 생성일 설정
-                .build();
-    }
+    private String profileUrl;          //프로필 url
 
 }

@@ -3,6 +3,7 @@ package com.duhwan.ustime_backend.config.jwt;
 import com.duhwan.ustime_backend.config.security.CustomUserDetails;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -13,9 +14,11 @@ import java.util.Map;
 @Slf4j
 @Component
 public class JwtUtil {
-    
-    private final String SECRET_KEY = "mySuperSecretKeyWhichIsAtLeast512BitsLongMySuperSecretKeyWhichIsAtLeast512BitsLongdfsdfsdfsdfsdf";                //보안을 위해 추후 환경변수로 변경예정
-    private final long EXPIRATION_TIME = 1000L * 60 * 60;   //1시간
+
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
+    @Value("${EXPIRATION_TIME}")
+    private long EXPIRATION_TIME;
 
     // JWT 토큰 생성
     public String generateToken(CustomUserDetails userDetails) { // UserDto 대신 CustomUserDetails 사용

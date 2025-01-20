@@ -47,6 +47,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework:spring-messaging'
 
+    //S3 의존성
+    implementation 'software.amazon.awssdk:s3:2.20.40' // 최신 버전 확인 후 사용
+    implementation 'software.amazon.awssdk:sts:2.20.40' // 세션 토큰 발급 시 필요
+
 }
 
 tasks.named('test') {

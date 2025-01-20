@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.duhwan.ustime_backend.UsTimeBackendApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-11-04T09:23:44" hostname="DESKTOP-9U6IIIA" time="1.719">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.duhwan.ustime_backend.UsTimeBackendApplicationTests" time="1.719"/>
+  <system-out><![CDATA[18:23:38.521 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.duhwan.ustime_backend.UsTimeBackendApplicationTests]: UsTimeBackendApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+18:23:38.649 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.duhwan.ustime_backend.UsTimeBackendApplication for test class com.duhwan.ustime_backend.UsTimeBackendApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.5)
+
+2024-11-04T18:23:39.170+09:00  INFO 19856 --- [UsTime_Backend] [    Test worker] c.d.u.UsTimeBackendApplicationTests      : Starting UsTimeBackendApplicationTests using Java 17.0.1 with PID 19856 (started by 새로운시작 in C:\duhwan_workspace\UsTime_Backend)
+2024-11-04T18:23:39.172+09:00  INFO 19856 --- [UsTime_Backend] [    Test worker] c.d.u.UsTimeBackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2024-11-04T18:23:43.722+09:00  WARN 19856 --- [UsTime_Backend] [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d187becf-40c1-4711-9611-639c7df8e1f5
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-11-04T18:23:43.772+09:00  INFO 19856 --- [UsTime_Backend] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-11-04T18:23:44.151+09:00  INFO 19856 --- [UsTime_Backend] [    Test worker] c.d.u.UsTimeBackendApplicationTests      : Started UsTimeBackendApplicationTests in 5.283 seconds (process running for 6.656)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

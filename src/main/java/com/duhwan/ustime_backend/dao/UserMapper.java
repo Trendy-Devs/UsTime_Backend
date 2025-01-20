@@ -20,4 +20,5 @@ public interface UserMapper {
 
     void updatePassword(ChangePasswordDto changePasswordDto);
 
+    void uploadProfileImage(Long userId, String imageUrl);
 }

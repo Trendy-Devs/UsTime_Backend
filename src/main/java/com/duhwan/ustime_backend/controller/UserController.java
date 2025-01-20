@@ -3,13 +3,17 @@ package com.duhwan.ustime_backend.controller;
 import com.duhwan.ustime_backend.dto.ChangePasswordDto;
 import com.duhwan.ustime_backend.dto.LoginDto;
 import com.duhwan.ustime_backend.dto.UserDto;
+import com.duhwan.ustime_backend.service.S3Service;
 import com.duhwan.ustime_backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -20,6 +24,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final S3Service s3Service;
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입")
@@ -59,4 +64,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비밀번호 변경 실패");
         }
     }
+    
+    @PostMapping(value = "/profile" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "프로필 사진 설정")
+    public ResponseEntity<?> uploadProfileImage(@RequestParam("userId") Long userId, @RequestPart(value = "file") MultipartFile file) {   //requestPart 사용해야함
+        try {
+            String imageUrl = s3Service.uploadFile(file);
+            userService.uploadProfileImage(userId, imageUrl);
+            return ResponseEntity.ok(Map.of("profileImageUrl", imageUrl));
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("프로필 사진 업로드 실패");
+        }
+    }
+    
 }

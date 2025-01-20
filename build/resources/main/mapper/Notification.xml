@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.duhwan.ustime_backend.dao.NotificationMapper">
+
+    <!-- 알림 생성 (커플 신청, 승인, 거절) -->
+    <insert id="createNotification" parameterType="NotificationDto">
+        INSERT INTO Notification (userId, type, typeId, message, summary, status, createdAt, coupleId)
+        VALUES (#{userId}, #{type}, #{typeId}, #{message}, #{summary}, #{status}, #{createdAt}, #{coupleId});
+    </insert>
+
+    <!-- 알림 조회 -->
+    <select id="getNotifications" resultType="NotificationDto">
+        SELECT * FROM Notification WHERE userId = #{userId}
+        ORDER BY createdAt DESC;
+    </select>
+
+    <!-- 유저 반환 -->
+    <select id="getUserId" resultType="Long">
+        SELECT userId FROM Notification WHERE notificationId = #{notificationId}
+    </select>
+
+    <!-- 알림 상태 업데이트 (읽음 처리) -->
+    <update id="updateNotificationStatus" parameterType="map">
+        UPDATE Notification
+        SET status = #{status},
+            readAt = CURRENT_TIMESTAMP
+        WHERE notificationId = #{notificationId};
+    </update>
+
+    <!-- 알림 삭제 -->
+    <delete id="deleteNotification" parameterType="long">
+        DELETE FROM Notification WHERE notificationId = #{notificationId};
+    </delete>
+
+    <!-- 일정 삭제후 알림 삭제   -->
+    <delete id="deleteScheduleNoti">
+        DELETE FROM Notification WHERE typeId = #{scheduleId} AND type LIKE '일정%';
+    </delete>
+
+    <!-- 커플 매칭 후 커플요청 알림 삭제   -->
+    <delete id="deleteCoupleRequestNoti">
+        DELETE FROM Notification WHERE typeId = #{requestId} AND type = '커플 신청';
+    </delete>
+
+    <!-- 30일 지난 알림 자동삭제 &lt;는 <를 의미합니다. -->
+    <delete id="deleteOldNoti">
+        DELETE FROM Notification
+        WHERE (status = '읽음' AND readAt &lt; #{readAtLimit})
+        OR createdAt &lt; #{createAtLimit}
+    </delete>
+
+</mapper>

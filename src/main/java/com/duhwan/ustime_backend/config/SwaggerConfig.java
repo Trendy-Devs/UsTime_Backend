@@ -20,7 +20,7 @@ public class SwaggerConfig {
                                 .type(SecurityScheme.Type.APIKEY)
                                 .in(SecurityScheme.In.HEADER)
                                 .scheme("Bearer")
-                                .bearerFormat("Authorization")))
+                                .bearerFormat("Bearer")))
                 .addSecurityItem(new SecurityRequirement().addList("Authorization")) // 모든 API에 JWT 보안 적용
                 .info(apiInfo());
     }

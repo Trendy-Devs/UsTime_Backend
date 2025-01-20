@@ -108,6 +108,10 @@ public class UserService {
         userMapper.updatePassword(changePasswordDto);
     }
 
+    public void uploadProfileImage(Long userId, String imageUrl) {
+        userMapper.uploadProfileImage(userId, imageUrl);
+    }
+
 
 
 }
