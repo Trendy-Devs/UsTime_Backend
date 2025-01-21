@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,9 +26,11 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;  //인증 매니저
+    private final S3Service s3Service;
     private final JwtUtil jwtUtil;
 
     // 회원가입
+    @Transactional
     public void signUp(UserDto dto) {
     String encodedPassword = passwordEncoder.encode(dto.getPassword());
         dto.setPassword(encodedPassword);      // 암호화 된 비밀번호로 재설정
@@ -66,6 +70,7 @@ public class UserService {
     }
 
     //내정보 수정
+    @Transactional
     public void updateUserInfo(UserDto updatedUserDto) {
         // 1. DB 업데이트
         userMapper.updateUser(updatedUserDto);
@@ -97,6 +102,7 @@ public class UserService {
     }
 
     // 비밀번호 재설정
+    @Transactional
     public void changePassword(ChangePasswordDto changePasswordDto) {
         UserDto user = userMapper.selectUser(changePasswordDto.getUserId());
         if (user == null || !passwordEncoder.matches(changePasswordDto.getCurrentPassword(), user.getPassword())) {
@@ -108,8 +114,13 @@ public class UserService {
         userMapper.updatePassword(changePasswordDto);
     }
 
-    public void uploadProfileImage(Long userId, String imageUrl) {
+    // 프로필 사진 업데이트
+    @Transactional
+    public String updateUserProfileImage(Long userId, MultipartFile file) throws Exception {
+        String imageUrl = s3Service.uploadFile(file);
         userMapper.uploadProfileImage(userId, imageUrl);
+
+        return imageUrl;
     }
 
 

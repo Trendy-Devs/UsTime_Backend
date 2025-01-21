@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,15 +32,26 @@ public class S3Service {
     // 파일 업로드 메서드
     public String uploadFile(MultipartFile file) throws IOException{
 
-        String fileName = file.getOriginalFilename();
-        String fileUrl = "userImage/" + fileName;
+        // 1. 파일 이름을 고유하게 생성
+        String originalFileName = file.getOriginalFilename();
+        if (originalFileName == null || originalFileName.isBlank()) {
+            throw new IllegalArgumentException("파일 이름이 유효하지 않습니다.");
+        }
+        // UUID를 활용하여 고유한 파일 이름 생성
+        String uniqueFileName = UUID.randomUUID() + "_" + originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+        String fileUrl = "userImage/" + uniqueFileName;
 
-        // S3로 파일 업로드
-        s3Client.putObject(PutObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(fileUrl)
-                        .build(),
-                RequestBody.fromBytes(file.getBytes()));
+        // 2. S3로 파일 업로드
+        try {
+            PutObjectRequest request = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(fileUrl)
+                    .contentType(file.getContentType()) // MIME 타입 설정
+                    .build();
+            s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
+        } catch (SdkException e) {
+            throw new IOException("S3 업로드 중 오류가 발생했습니다.", e);
+        }
         return getFileUrl(fileUrl);
     }
 
