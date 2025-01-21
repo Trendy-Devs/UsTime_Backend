@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CheckListDto {
 
-    private Long checklistId;
-    private Long userId;
-    private Long coupleId;
-    private String category;
-    private String title;
+    private Long checklistId;               //체크리스트 아이디
+    private Long userId;                    //유저아이디
+    private Long coupleId;                  //커플 번호
+    private String category;                //카테고리
+    private String title;                   //제목
     @JsonProperty("isChecked")
-    private boolean isChecked;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private boolean isChecked;              //체크 유무
+    private LocalDateTime createdAt;        //생성일
+    private LocalDateTime updatedAt;        //업데이트된 날짜
 }
