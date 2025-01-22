@@ -80,7 +80,7 @@ public class UserController {
             }
 
             String imageUrl = userService.updateUserProfileImage(userId, file);
-            return ResponseEntity.ok(Map.of("profileImageUrl", imageUrl));
+            return ResponseEntity.ok(Map.of("profileUrl", imageUrl));
         } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("프로필 사진 업로드 실패");

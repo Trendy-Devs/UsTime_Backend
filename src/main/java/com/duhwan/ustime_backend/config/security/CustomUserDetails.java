@@ -27,6 +27,10 @@ public class CustomUserDetails implements UserDetails {
         this.user.setEmail(email);
     }
 
+    public void updateProfileUrl(String imageUrl) {
+        this.user.setProfileUrl(imageUrl);
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -37,6 +41,14 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getPassword() {
         return user.getPassword();
+    }
+
+    public String getProfileUrl() {
+        return user.getProfileUrl();
+    }
+
+    public Long getUserId() {
+        return user.getUserId();
     }
 
     @Override
@@ -68,8 +80,6 @@ public class CustomUserDetails implements UserDetails {
         return true; // 계정 활성 여부
     }
 
-    public Long getUserId() {
-        return user.getUserId();
-    }
+
 
 }

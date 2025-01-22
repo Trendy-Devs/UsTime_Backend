@@ -47,10 +47,10 @@ public class UserService {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         String token = jwtUtil.generateToken(customUserDetails);
         Long userId = customUserDetails.getUserId();
-        // coupleId가 null인 경우 Map에 포함시키지 않음
         Long coupleId = userMapper.getCoupleId(userId);
         String name = customUserDetails.getUsername();
         String email = customUserDetails.getEmail();
+        String profileUrl = customUserDetails.getProfileUrl();
 
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
@@ -58,8 +58,12 @@ public class UserService {
         response.put("name", name);
         response.put("email", email);
 
+        // null 이 허용인 항목들
         if (coupleId != null) {
-            response.put("coupleId", coupleId);  // coupleId가 존재하면 포함
+            response.put("coupleId", coupleId);  
+        }
+        if (profileUrl != null) {
+            response.put("profileUrl", profileUrl);
         }
         return response;
     }
@@ -120,6 +124,19 @@ public class UserService {
         String oldFileUrl = userMapper.selectUser(userId).getProfileUrl();
         String imageUrl = s3Service.uploadFile(file, oldFileUrl);
         userMapper.uploadProfileImage(userId, imageUrl);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+            customUserDetails.updateProfileUrl(imageUrl);
+
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                    customUserDetails,
+                    authentication.getCredentials(),
+                    customUserDetails.getAuthorities()
+            );
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+        }
 
         return imageUrl;
     }
