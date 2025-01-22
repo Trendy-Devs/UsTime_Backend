@@ -30,7 +30,12 @@ public class S3Service {
     private String cloudFrontDomainName;
 
     // 파일 업로드 메서드
-    public String uploadFile(MultipartFile file) throws IOException{
+    public String uploadFile(MultipartFile file, String oldFileUrl) throws IOException{
+
+        // 이전 파일 삭제
+        if (oldFileUrl != null && !oldFileUrl.isBlank()) {
+            deleteFile(oldFileUrl);
+        }
 
         // 1. 파일 이름을 고유하게 생성
         String originalFileName = file.getOriginalFilename();
@@ -55,10 +60,22 @@ public class S3Service {
         return getFileUrl(fileUrl);
     }
 
+    // 파일 삭제 메서드
+    public void deleteFile(String fileUrl) {
+        try {
+            // fileUrl에서 key 추출 (cloudFrontDomainName 이후 경로만 사용)
+            String key = fileUrl.replace(cloudFrontDomainName + "/", "");
+            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key).build());
+        } catch (SdkException e) {
+            throw new RuntimeException("S3에서 파일 삭제 중 오류가 발생했습니다.", e);
+        }
+    }
+
     // 파일 다운로드 메서드 (CloudFront에서 직접 url을 받음)
     public String getFileUrl(String fileUrl) {
         return cloudFrontDomainName + "/" + fileUrl;
     }
+
 
     // 파일 다운로드 메서드(로컬에서 직접 받을 떄) -> 현재 사용하지 않음
     public Path downloadFile(String fileName) throws IOException {

@@ -117,7 +117,8 @@ public class UserService {
     // 프로필 사진 업데이트
     @Transactional
     public String updateUserProfileImage(Long userId, MultipartFile file) throws Exception {
-        String imageUrl = s3Service.uploadFile(file);
+        String oldFileUrl = userMapper.selectUser(userId).getProfileUrl();
+        String imageUrl = s3Service.uploadFile(file, oldFileUrl);
         userMapper.uploadProfileImage(userId, imageUrl);
 
         return imageUrl;
