@@ -44,20 +44,19 @@ public class S3Service {
         }
         // UUID를 활용하여 고유한 파일 이름 생성
         String uniqueFileName = UUID.randomUUID() + "_" + originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-        String fileUrl = "userImage/" + uniqueFileName;
 
         // 2. S3로 파일 업로드
         try {
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucketName)
-                    .key(fileUrl)
+                    .key(uniqueFileName)
                     .contentType(file.getContentType()) // MIME 타입 설정
                     .build();
             s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
         } catch (SdkException e) {
             throw new IOException("S3 업로드 중 오류가 발생했습니다.", e);
         }
-        return getFileUrl(fileUrl);
+        return getFileUrl(uniqueFileName);
     }
 
     // 파일 삭제 메서드
