@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.duhwan.ustime_backend.dao.CommentMapper">
+
+    <!-- 특정 사진의 댓글 목록 조회 -->
+    <select id="getCommentsByPhotoId" resultType="CommentResponseDto">
+        SELECT
+            c.commentId, c.photoId, u.name AS commentedByUsername,
+            c.content, c.createdAt
+        FROM Comment c
+                 JOIN User u ON c.commentedBy = u.userId
+        WHERE c.photoId = #{photoId}
+        ORDER BY c.createdAt ASC
+    </select>
+
+    <!-- 댓글 추가 -->
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="commentId">
+        INSERT INTO Comment (photoId, commentedBy, content)
+        VALUES (#{photoId}, #{commentedBy}, #{content})
+    </insert>
+
+    <!-- 댓글 수정 -->
+    <update id="updateComment">
+        UPDATE Comment
+        SET content = #{content}
+        WHERE commentId = #{commentId} AND commentedBy = #{commentedBy}
+    </update>
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteComment">
+        DELETE FROM Comment WHERE commentId = #{commentId} AND commentedBy = #{commentedBy}
+    </delete>
+</mapper>

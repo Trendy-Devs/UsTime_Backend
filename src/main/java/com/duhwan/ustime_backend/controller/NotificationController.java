@@ -1,6 +1,6 @@
 package com.duhwan.ustime_backend.controller;
 
-import com.duhwan.ustime_backend.dto.CoupleResponseDto;
+import com.duhwan.ustime_backend.dto.Couple.CoupleResponseDto;
 import com.duhwan.ustime_backend.dto.NotificationDto;
 import com.duhwan.ustime_backend.dto.ScheduleDto;
 import com.duhwan.ustime_backend.service.NotificationService;

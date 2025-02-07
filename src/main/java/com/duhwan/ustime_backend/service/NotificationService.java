@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +47,34 @@ public class NotificationService {
                     "/ustime/notifications/" + userId,
                     notification
             );
+    }
+
+    // 액션에 맞는 메시지 생성 메서드
+    public String createMessage(String action, String userName, String title, LocalDateTime startDate) {
+        switch (action) {
+            case "일정 생성":
+                return userName + "님이 새로운 일정을 생성하였습니다.";
+            case "사진 생성":
+                return userName + "님이 새로운 사진을 업로드하였습니다.";
+            case "커플 매칭":
+                return userName + "님이 커플을 매칭하였습니다.";
+            default:
+                return userName + "님이 활동을 진행하였습니다."; // 기본 메시지
+        }
+    }
+
+    // 액션에 맞는 요약 생성 메서드
+    public String createSummary(String action, String title, LocalDateTime startDate) {
+        switch (action) {
+            case "일정 생성":
+                return "일정: " + title + "\n일자: " + startDate;
+            case "사진 생성":
+                return "새로운 사진이 업로드되었습니다: " + title;
+            case "커플 매칭":
+                return "커플 매칭이 완료되었습니다.";
+            default:
+                return "새로운 활동이 있었습니다.";
+        }
     }
 
     // 알림 조회

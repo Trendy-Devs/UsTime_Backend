@@ -1,6 +1,6 @@
 package com.duhwan.ustime_backend.controller;
 
-import com.duhwan.ustime_backend.dto.CheckListDto;
+import com.duhwan.ustime_backend.dto.Couple.CheckListDto;
 import com.duhwan.ustime_backend.service.CheckListService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

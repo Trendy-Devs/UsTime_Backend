@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,11 +24,24 @@ import java.util.UUID;
 public class S3Service {
 
     private final S3Client s3Client;
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final List<String> ALLOWED_TYPES = List.of("image/jpeg", "image/png");
 
     @Value("${aws.s3.bucket-name}")
     private String bucketName;
     @Value("${cloudfront.domain-name}")
     private String cloudFrontDomainName;
+
+    // 파일 검사 메서드
+    public void validateFile(MultipartFile file) {
+        String contentType = file.getContentType();
+        if (!ALLOWED_TYPES.contains(contentType)) {
+            throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPEG 또는 PNG만 가능합니다.");
+        }
+        if (file.getSize() > MAX_FILE_SIZE) {
+            throw new IllegalArgumentException("파일 크기는 5MB를 초과할 수 없습니다.");
+        }
+    }
 
     // 파일 업로드 메서드
     public String uploadFile(MultipartFile file, String oldFileUrl) throws IOException{

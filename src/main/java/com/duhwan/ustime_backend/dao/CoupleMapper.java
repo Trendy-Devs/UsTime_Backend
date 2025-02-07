@@ -1,8 +1,8 @@
 package com.duhwan.ustime_backend.dao;
 
-import com.duhwan.ustime_backend.dto.CoupleResponseDto;
-import com.duhwan.ustime_backend.dto.CoupleDto;
-import com.duhwan.ustime_backend.dto.CoupleRequestDto;
+import com.duhwan.ustime_backend.dto.Couple.CoupleResponseDto;
+import com.duhwan.ustime_backend.dto.Couple.CoupleDto;
+import com.duhwan.ustime_backend.dto.Couple.CoupleRequestDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 

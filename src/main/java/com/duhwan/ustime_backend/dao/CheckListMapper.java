@@ -1,6 +1,6 @@
 package com.duhwan.ustime_backend.dao;
 
-import com.duhwan.ustime_backend.dto.CheckListDto;
+import com.duhwan.ustime_backend.dto.Couple.CheckListDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

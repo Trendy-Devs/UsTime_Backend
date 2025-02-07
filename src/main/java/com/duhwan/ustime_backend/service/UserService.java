@@ -7,6 +7,7 @@ import com.duhwan.ustime_backend.dto.ChangePasswordDto;
 import com.duhwan.ustime_backend.dto.LoginDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -128,19 +130,29 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-            customUserDetails.updateProfileUrl(imageUrl);
 
-            Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                    customUserDetails,
-                    authentication.getCredentials(),
-                    customUserDetails.getAuthorities()
-            );
-            SecurityContextHolder.getContext().setAuthentication(newAuth);
+            // 비동기적으로 사용자 인증 정보 갱신
+            updateUserDetailsAsync(customUserDetails, imageUrl);
         }
 
         return imageUrl;
     }
 
+    // 비동기로 userDetail에 정보 수정
+    @Async
+    public CompletableFuture<Void> updateUserDetailsAsync(CustomUserDetails customUserDetails, String imageUrl) {
+        customUserDetails.updateProfileUrl(imageUrl);
 
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                customUserDetails,
+                SecurityContextHolder.getContext().getAuthentication().getCredentials(),
+                customUserDetails.getAuthorities()
+        );
+
+        // 비동기 스레드에서 인증 정보 갱신
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        return CompletableFuture.completedFuture(null);
+    }
 
 }

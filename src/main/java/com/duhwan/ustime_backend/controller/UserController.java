@@ -3,6 +3,7 @@ package com.duhwan.ustime_backend.controller;
 import com.duhwan.ustime_backend.dto.ChangePasswordDto;
 import com.duhwan.ustime_backend.dto.LoginDto;
 import com.duhwan.ustime_backend.dto.UserDto;
+import com.duhwan.ustime_backend.service.S3Service;
 import com.duhwan.ustime_backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final S3Service s3Service;
 
 
     @PostMapping("/signup")
@@ -67,18 +69,7 @@ public class UserController {
     @Operation(summary = "프로필 사진 설정")
     public ResponseEntity<?> uploadProfileImage(@RequestParam("userId") Long userId, @RequestPart(value = "file") MultipartFile file) {   //requestPart 사용해야함
         try {
-            // MIME 타입 검증
-            String contentType = file.getContentType();
-            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
-                return ResponseEntity.badRequest().body("허용되지 않는 파일 형식입니다. JPEG 또는 PNG만 가능합니다.");
-            }
-
-            // 파일 크기 제한 (5MB 이하)
-            final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-            if (file.getSize() > MAX_FILE_SIZE) {
-                return ResponseEntity.badRequest().body("파일 크기는 5MB를 초과할 수 없습니다.");
-            }
-
+            s3Service.validateFile(file);
             String imageUrl = userService.updateUserProfileImage(userId, file);
             return ResponseEntity.ok(Map.of("profileUrl", imageUrl));
         } catch(Exception e) {

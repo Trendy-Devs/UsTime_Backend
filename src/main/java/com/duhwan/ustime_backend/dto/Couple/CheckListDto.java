@@ -1,14 +1,16 @@
-package com.duhwan.ustime_backend.dto;
+package com.duhwan.ustime_backend.dto.Couple;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Alias("CheckListDto")
 public class CheckListDto {
 
     private Long checklistId;               //체크리스트 아이디

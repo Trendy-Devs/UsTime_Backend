@@ -1,7 +1,7 @@
 package com.duhwan.ustime_backend.controller;
 
-import com.duhwan.ustime_backend.dto.CoupleDto;
-import com.duhwan.ustime_backend.dto.CoupleRequestDto;
+import com.duhwan.ustime_backend.dto.Couple.CoupleDto;
+import com.duhwan.ustime_backend.dto.Couple.CoupleRequestDto;
 import com.duhwan.ustime_backend.dto.UserDto;
 import com.duhwan.ustime_backend.service.CoupleService;
 import io.swagger.v3.oas.annotations.Operation;
