@@ -50,12 +50,20 @@ public class PhotoController {
     @Operation(summary = "사진 등록")
     @PostMapping(value = "insert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> insertPhoto(
-            @RequestPart(value = "photo") PhotoRequestDto photo, // photo를 JSON으로 받기
+            @RequestParam(value = "coupleId") Long coupleId,        // 커플 ID
+            @RequestParam(value = "uploadedBy") Long uploadedBy,    // 업로드한 사용자 ID
+            @RequestParam(value = "caption") String caption,           // 설명
             @RequestPart(value = "file") MultipartFile file) throws FileUploadException {
 
+        PhotoRequestDto photo = new PhotoRequestDto();
+        photo.setCaption(caption);
+        photo.setCoupleId(coupleId);
+        photo.setUploadedBy(uploadedBy);
+        // 파일 업로드 및 설명 처리
         photoService.insertPhoto(photo, file);
         return ResponseEntity.ok("사진 등록이 성공하였습니다.");
     }
+
 
 
 

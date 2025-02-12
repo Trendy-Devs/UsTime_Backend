@@ -15,7 +15,6 @@ public class PhotoResponseDto {
 
     private Long photoId;       // 사진 ID
     private String photoUrl;    // 사진 URL
-    private String photoTitle;  // 제목
     private String caption;     // 설명
     private String uploadedByUsername; // 업로더 이름
     private LocalDateTime uploadedAt;  // 업로드 시간

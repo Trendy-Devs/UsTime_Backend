@@ -12,9 +12,9 @@ import org.apache.ibatis.type.Alias;
 // 사진 요청 Dto
 public class PhotoRequestDto {
 
+    private Long photoId;
     private Long coupleId;     // 커플 ID
     private Long uploadedBy;   // 업로더 ID
     private String photoUrl;   // 사진 URL (S3)
-    private String photoTitle; // 사진 제목
     private String caption;    // 사진 설명 (옵션)
 }

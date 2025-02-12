@@ -7,7 +7,7 @@
     <!-- 전체 사진첩 조회 -->
     <select id="getAllPhotos" resultType="PhotoResponseDto">
         SELECT
-            p.photoId, p.photoUrl, p.photoTitle, p.caption,
+            p.photoId, p.photoUrl, p.caption,
             u.name AS uploadedByUsername, p.uploadedAt
         FROM Photo p
                  JOIN User u ON p.uploadedBy = u.userId
@@ -18,7 +18,7 @@
     <!-- 단일 사진 조회 -->
     <select id="getPhotoById" resultType="PhotoResponseDto">
         SELECT
-            p.photoId, p.photoUrl, p.photoTitle, p.caption,
+            p.photoId, p.photoUrl, p.caption,
             u.name AS uploadedByUsername, p.uploadedAt
         FROM Photo p
                  JOIN User u ON p.uploadedBy = u.userId
@@ -41,14 +41,14 @@
 
     <!-- 사진 업로드 -->
     <insert id="insertPhoto" useGeneratedKeys="true" keyProperty="photoId">
-        INSERT INTO Photo (coupleId, uploadedBy, photoUrl, photoTitle, caption)
-        values (#{coupleId}, #{uploadedBy}, #{photoUrl}, #{photoTitle}, #{caption})
+        INSERT INTO Photo (coupleId, uploadedBy, photoUrl, caption)
+        values (#{coupleId}, #{uploadedBy}, #{photoUrl}, #{caption})
     </insert>
 
     <!-- 사진 수정 (본인만 가능) -->
     <update id="updatePhoto">
         UPDATE Photo
-        SET photoTitle = #{photoTitle}, caption = #{caption}
+        SET caption = #{caption}
         WHERE photoId = #{photoId} AND uploadedBy = #{uploadedBy}
     </update>
 
