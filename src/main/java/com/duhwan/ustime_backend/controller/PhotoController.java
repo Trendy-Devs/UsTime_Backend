@@ -6,6 +6,7 @@ import com.duhwan.ustime_backend.dto.Photo.RandomPhotoDto;
 import com.duhwan.ustime_backend.service.PhotoService;
 import com.duhwan.ustime_backend.service.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -49,8 +50,11 @@ public class PhotoController {
     @Operation(summary = "사진 등록")
     @PostMapping(value = "insert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> insertPhoto(
-            @RequestPart(value = "photo") PhotoRequestDto photo,
-            @RequestPart(value = "file") MultipartFile file) throws FileUploadException {
+            @RequestPart(value = "photo", required = true)
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(mediaType = "application/json"))
+            PhotoRequestDto photo,
+
+            @RequestPart(value = "file", required = true) MultipartFile file) throws FileUploadException {
 
         photoService.insertPhoto(photo, file);
         return ResponseEntity.ok("사진 등록이 성공하였습니다.");
