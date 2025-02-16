@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -36,7 +38,16 @@ public class PhotoService {
     }
 
     public List<RandomPhotoDto> getRandomLastMonthPhotos() {
-        return photoMapper.getRandomLastMonthPhotos();
+        // 저번 달의 시작일과 종료일 계산
+        LocalDate firstDayOfLastMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);  // 저번 달 첫날
+        LocalDate firstDayOfCurrentMonth = LocalDate.now().withDayOfMonth(1);  // 이번 달 첫날
+
+        // 날짜 포맷팅
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String startDate = firstDayOfLastMonth.format(formatter);
+        String endDate = firstDayOfCurrentMonth.format(formatter);
+
+        return photoMapper.getRandomLastMonthPhotos(startDate, endDate);
     }
 
     @Transactional
@@ -60,12 +71,19 @@ public class PhotoService {
 
     @Transactional
     public void deletePhoto(Long photoId, Long loggedInUserId) {
-        Long uploadedBy = photoMapper.findPhotoById(photoId);
-        if (!uploadedBy.equals(loggedInUserId)) {
+
+        PhotoRequestDto photo = photoMapper.findPhotoById(photoId);
+
+        if (photo == null) {
+            throw new IllegalArgumentException("사진을 찾을 수 없습니다.");
+        }
+        if (!photo.getUploadedBy().equals(loggedInUserId)) {
             throw new AccessDeniedException("본인이 업로드한 사진만 삭제할 수 있습니다.");
         }
-        photoMapper.deletePhoto(photoId, uploadedBy);
+        s3Service.deleteFile(photo.getPhotoUrl());
+        photoMapper.deletePhoto(photoId, loggedInUserId);
     }
+
 
 
 

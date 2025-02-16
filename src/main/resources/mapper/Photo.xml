@@ -28,17 +28,19 @@
     </select>
 
 
-    <!--    &lt;!&ndash; 저번달 랜덤 사진 10장 반환 &ndash;&gt;-->
-<!--    <select id="getRandomLastMonthPhotos" resultType="RandomPhotoDto">-->
-<!--    <![CDATA[-->
-<!--        SELECT p.photoId, p.photoUrl-->
-<!--        FROM Photo p-->
-<!--        WHERE p.uploadedAt >= DATE_SUB(CURRENT_DATE, INTERVAL DAY(CURRENT_DATE) DAY) - INTERVAL 1 MONTH-->
-<!--      AND p.uploadedAt < DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')-->
-<!--        ORDER BY RAND()-->
-<!--        LIMIT 10-->
-<!--        ]]>-->
-<!--</select>-->
+    <!-- 저번달 랜덤 사진 10장 반환-->
+    <select id="getRandomLastMonthPhotos" resultType="RandomPhotoDto">
+    <![CDATA[
+        SELECT p.photoId, p.photoUrl
+        FROM Photo p
+        WHERE p.uploadedAt >= #{startDate}
+          AND p.uploadedAt < #{endDate}
+        ORDER BY RAND()
+            LIMIT 5
+        ]]>
+</select>
+
+
 
     <!-- 사진 업로드 -->
     <insert id="insertPhoto" useGeneratedKeys="true" keyProperty="photoId">
@@ -59,8 +61,8 @@
     </delete>
 
 <!-- 본인확인 -->
-    <select id="findPhotoById" resultType="Long">
-        SELECT uploadedBy FROM Photo where photoId = #{photoId}
+    <select id="findPhotoById" resultType="PhotoRequestDto">
+        SELECT uploadedBy, photoUrl FROM Photo where photoId = #{photoId}
     </select>
 
 </mapper>
