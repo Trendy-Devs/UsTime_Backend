@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/calendar/all/**", "/calendar/week/**","/calendar/create/**", "/calendar/update/**", "/calendar/delete/**").authenticated()  // 일정 인증 필요
                         .requestMatchers("/notifications/getNotify/**", "/notifications/getDetail/**","/notifications/markAsRead/**", "/notifications/delete/**").authenticated()  // 알림 인증 필요
                         .requestMatchers("/check/update/**", "/check/add/**","/check/**", "/check/delete/**").authenticated()  // 알림 인증 필요
+                        .requestMatchers("/photo/all", "/photo/{photoId}","/photo/random", "/photo/insert/**", "/photo/update/**","/photo/delete").authenticated()  // 알림 인증 필요
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // OPTIONS 요청 허용
                         .anyRequest().permitAll()  // 그 외 모든 요청 인증
                 )

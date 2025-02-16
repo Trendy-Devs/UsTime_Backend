@@ -18,14 +18,17 @@
     <!-- 단일 사진 조회 -->
     <select id="getPhotoById" resultType="PhotoResponseDto">
         SELECT
-            p.photoId, p.photoUrl, p.caption,
-            u.name AS uploadedByUsername, p.uploadedAt
+        p.photoId, p.photoUrl, p.caption,
+        u.name AS uploadedByUsername,
+        u.profileUrl AS profileUrl,
+        p.uploadedAt
         FROM Photo p
-                 JOIN User u ON p.uploadedBy = u.userId
+        JOIN User u ON p.uploadedBy = u.userId
         WHERE p.photoId = #{photoId}
     </select>
 
-<!--    &lt;!&ndash; 저번달 랜덤 사진 10장 반환 &ndash;&gt;-->
+
+    <!--    &lt;!&ndash; 저번달 랜덤 사진 10장 반환 &ndash;&gt;-->
 <!--    <select id="getRandomLastMonthPhotos" resultType="RandomPhotoDto">-->
 <!--    <![CDATA[-->
 <!--        SELECT p.photoId, p.photoUrl-->
@@ -36,8 +39,6 @@
 <!--        LIMIT 10-->
 <!--        ]]>-->
 <!--</select>-->
-
-
 
     <!-- 사진 업로드 -->
     <insert id="insertPhoto" useGeneratedKeys="true" keyProperty="photoId">
@@ -52,9 +53,14 @@
         WHERE photoId = #{photoId} AND uploadedBy = #{uploadedBy}
     </update>
 
-    <!-- 6. 사진 삭제 (본인만 가능) -->
+    <!-- 사진 삭제 (본인만 가능) -->
     <delete id="deletePhoto">
         DELETE FROM Photo WHERE photoId = #{photoId} AND uploadedBy = #{uploadedBy}
     </delete>
-    
+
+<!-- 본인확인 -->
+    <select id="findPhotoById" resultType="Long">
+        SELECT uploadedBy FROM Photo where photoId = #{photoId}
+    </select>
+
 </mapper>

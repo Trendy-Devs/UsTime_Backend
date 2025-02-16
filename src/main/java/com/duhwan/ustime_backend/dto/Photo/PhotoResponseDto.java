@@ -13,11 +13,12 @@ import java.time.LocalDateTime;
 // 사진 응답 Dto
 public class PhotoResponseDto {
 
-    private Long photoId;       // 사진 ID
-    private String photoUrl;    // 사진 URL
-    private String caption;     // 설명
-    private String uploadedByUsername; // 업로더 이름
-    private LocalDateTime uploadedAt;  // 업로드 시간
+    private Long photoId;               // 사진 ID
+    private String photoUrl;            // 사진 URL
+    private String caption;             // 설명
+    private String uploadedByUsername;  // 업로더 이름
+    private String profileUrl;          // 유저 프로필 Url
+    private LocalDateTime uploadedAt;   // 업로드 시간
 }
 
 

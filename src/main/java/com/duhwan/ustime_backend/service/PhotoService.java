@@ -7,6 +7,7 @@ import com.duhwan.ustime_backend.dto.Photo.PhotoResponseDto;
 import com.duhwan.ustime_backend.dto.Photo.RandomPhotoDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,9 +59,14 @@ public class PhotoService {
     }
 
     @Transactional
-    public void deletePhoto(Long photoId) {
-        photoMapper.deletePhoto(photoId);
+    public void deletePhoto(Long photoId, Long loggedInUserId) {
+        Long uploadedBy = photoMapper.findPhotoById(photoId);
+        if (!uploadedBy.equals(loggedInUserId)) {
+            throw new AccessDeniedException("본인이 업로드한 사진만 삭제할 수 있습니다.");
+        }
+        photoMapper.deletePhoto(photoId, uploadedBy);
     }
+
 
 
 }

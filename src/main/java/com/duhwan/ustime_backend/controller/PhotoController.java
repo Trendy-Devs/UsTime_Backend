@@ -1,5 +1,6 @@
 package com.duhwan.ustime_backend.controller;
 
+import com.duhwan.ustime_backend.config.security.CustomUserDetails;
 import com.duhwan.ustime_backend.dto.Photo.PhotoRequestDto;
 import com.duhwan.ustime_backend.dto.Photo.PhotoResponseDto;
 import com.duhwan.ustime_backend.dto.Photo.RandomPhotoDto;
@@ -12,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,10 +68,6 @@ public class PhotoController {
         return ResponseEntity.ok("사진 등록이 성공하였습니다.");
     }
 
-
-
-
-
     @Operation(summary = "사진 수정")
     @PutMapping("/update")
     public ResponseEntity<String> updatePhoto(@RequestBody PhotoRequestDto photo) {
@@ -78,8 +78,21 @@ public class PhotoController {
     @Operation(summary = "사진 삭제")
     @DeleteMapping("/delete")
     public ResponseEntity<String> deletePhoto(Long photoId) {
-        photoService.deletePhoto(photoId);
+        Long uploadedBy = getLoggedInUserId();
+        photoService.deletePhoto(photoId,uploadedBy);
         return ResponseEntity.ok("사진이 삭제되었습니다.");
     }
+
+    // 현재 로그인한 사용자 ID 가져오는 메서드
+    private Long getLoggedInUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("인증 정보가 없습니다.");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return userDetails.getUserId();
+    }
+
 
 }

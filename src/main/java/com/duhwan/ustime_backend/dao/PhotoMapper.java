@@ -15,5 +15,6 @@ public interface PhotoMapper {
     List<RandomPhotoDto> getRandomLastMonthPhotos();
     void insertPhoto(PhotoRequestDto photo);
     void updatePhoto(PhotoRequestDto photo);
-    void deletePhoto(@Param("photoId") Long photoId);
+    void deletePhoto(@Param("photoId") Long photoId,@Param("uploadedBy") Long uploadedBy);
+    Long findPhotoById(@Param("photoId") Long photoId);
 }
